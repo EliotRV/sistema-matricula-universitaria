@@ -42,3 +42,11 @@ void probarGrafoAlAzar();
 // Cola de espera
 void probarColaBasica();
 void probarColaAlAzar();
+
+// Sistema integrado
+void probarSistemaCarga();
+void probarSistemaEscenario();
+void probarSistemaReglas();
+void probarSistemaBorrados();
+void probarSistemaCitasPorPromedio();
+void probarSistemaExportar();

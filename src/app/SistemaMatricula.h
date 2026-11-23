@@ -1,44 +1,54 @@
 // Proyecto: Sistema de Matricula Universitaria
 // Estructura de Datos II
 // Eliot Rojas Vargas
-// Sistema de matricula: une los estudiantes y el arbol de citas
+// Sistema de matricula: une los componentes y coordina lo que involucra a varios
 
 #pragma once
 
 #include <string>
-#include <vector>
-#include "estudiantes/Estudiante.h"
-#include "citas/CitaMatricula.h"
-#include "citas/ArbolRNCitas.h"
+#include "comun/FuenteDatos.h"
+#include "estudiantes/ServicioEstudiantes.h"
+#include "plan/ServicioPlan.h"
+#include "historial/ServicioHistorial.h"
+#include "citas/ServicioCitas.h"
+#include "matricula/ServicioMatricula.h"
 
 class SistemaMatricula {
 public:
     SistemaMatricula();
 
-    // Datos iniciales
-    void cargarDatos(std::string rutaEstudiantes, std::string rutaCitas);
+    // Carga los datos iniciales desde una fuente (archivos o nube)
+    bool cargarDatos(IFuenteDatos& fuente);
+    void cargar(DatosIniciales& datos);
+    void vaciar();
 
-    // Citas de matricula
-    void asignarCita(long long fechaHora, std::string carne);
-    void buscarCita(long long fechaHora);
-    void consultarCitaDe(std::string carne);
-    void cancelarCita(long long fechaHora);
-    void agendaDeCitas();
-    void citasEnRango(long long desde, long long hasta);
-    void validarCita(std::string carne);
+    // Operaciones que tocan a varios componentes
+    bool eliminarEstudiante(std::string carne);
+    bool eliminarCurso(std::string codigo);
+    void mostrarHabilitados(std::string carne);
+    void asignarCitasPorPromedio(long long inicio, int minutosEntreCitas);
 
-    // Hora actual simulada
+    // Hora simulada para probar las citas
+    long long horaActual();
     void cambiarHoraActual(long long fechaHora);
-    void mostrarHoraActual();
 
-    void listarEstudiantes();
-    void mostrarArbolDeCitas();
+    // Datos del sistema en el mismo formato en que se cargan
+    void exportar(DatosIniciales& datos);
+
+    // Componentes
+    ServicioEstudiantes& estudiantes();
+    ServicioPlan& plan();
+    ServicioHistorial& historial();
+    ServicioCitas& citas();
+    ServicioMatricula& matricula();
 
 private:
-    ListaEstudiantes estudiantes;
-    ArbolRNCitas citas;
-    long long horaActual;
+    // El orden importa: cada servicio usa a los que estan antes
+    ServicioEstudiantes servicioEstudiantes;
+    ServicioPlan servicioPlan;
+    ServicioHistorial servicioHistorial;
+    ServicioCitas servicioCitas;
+    ServicioMatricula servicioMatricula;
 
-    void imprimirCita(CitaMatricula cita);
-    void imprimirListaDeCitas(std::vector<CitaMatricula>& lista);
+    long long hora;
 };

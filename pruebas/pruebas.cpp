@@ -45,13 +45,18 @@ void operator delete(void* bloque, size_t) noexcept {
 int pruebasHechas = 0;
 int pruebasFalladas = 0;
 
+// Pantalla real: algunas pruebas silencian cout mientras el sistema trabaja,
+// pero los resultados siempre se tienen que ver
+streambuf* pantalla = nullptr;
+
 void revisar(bool condicion, string descripcion) {
+    ostream salida(pantalla != nullptr ? pantalla : cout.rdbuf());
     pruebasHechas++;
 
     if (condicion) {
-        cout << "  [ok]    " << descripcion << "\n";
+        salida << "  [ok]    " << descripcion << "\n";
     } else {
-        cout << "  [FALLO] " << descripcion << "\n";
+        salida << "  [FALLO] " << descripcion << "\n";
         pruebasFalladas++;
     }
 }
@@ -59,6 +64,7 @@ void revisar(bool condicion, string descripcion) {
 // Programa principal
 
 int main() {
+    pantalla = cout.rdbuf();
     cout << "PRUEBAS DEL SISTEMA DE MATRICULA\n";
 
     long long reservasAntes = reservas;
@@ -86,6 +92,12 @@ int main() {
         probarGrafoAlAzar();
         probarColaBasica();
         probarColaAlAzar();
+        probarSistemaCarga();
+        probarSistemaEscenario();
+        probarSistemaReglas();
+        probarSistemaBorrados();
+        probarSistemaCitasPorPromedio();
+        probarSistemaExportar();
     }
 
     long long reservadas = reservas - reservasAntes;

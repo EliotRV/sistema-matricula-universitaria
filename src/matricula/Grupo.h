@@ -31,5 +31,8 @@ bool hayChoque(Grupo a, Grupo b);
 
 bool tieneCupo(Grupo grupo);
 
+// Imprime una hora HHMM como HH:MM
+void imprimirHora(int horaHHMM);
+
 // Imprime "Lunes 18:00-21:00"
 void imprimirHorario(Grupo grupo);

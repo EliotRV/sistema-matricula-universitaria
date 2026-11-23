@@ -1,41 +1,21 @@
 // Proyecto: Sistema de Matricula Universitaria
 // Estructura de Datos II
 // Eliot Rojas Vargas
-// Estudiante y lista enlazada de estudiantes
+// Estudiante del sistema
 
 #pragma once
 
 #include <string>
 
+// El carne es la clave en la tabla hash.
+// cita guarda la fecha y hora de su cita de matricula (0 si no tiene):
+// asi se llega a la cita desde el carne sin recorrer el arbol de citas.
 struct Estudiante {
     std::string carne;
     std::string nombre;
     std::string correo;
+    long long cita = 0;
 };
 
-// Nodo de la lista
-struct NodoEstudiante {
-    Estudiante estudiante;
-    NodoEstudiante* siguiente;
-};
-
-class ListaEstudiantes {
-public:
-    ListaEstudiantes();
-    ~ListaEstudiantes();
-
-    ListaEstudiantes(const ListaEstudiantes&) = delete;
-    ListaEstudiantes& operator=(const ListaEstudiantes&) = delete;
-
-    bool agregar(Estudiante estudiante);
-    Estudiante* buscar(std::string carne);
-    Estudiante* obtener(int posicion);
-
-    int cantidad();
-    void vaciar();
-
-private:
-    NodoEstudiante* primero;
-    NodoEstudiante* ultimo;
-    int total;
-};
+// Carne con formato AAAA-NNNN
+bool carneValido(std::string carne);

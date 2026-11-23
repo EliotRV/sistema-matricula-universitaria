@@ -52,6 +52,34 @@ bool fechaHoraValida(int anio, int mes, int dia, int hora, int minuto) {
     return true;
 }
 
+// Suma minutos y pasa al dia siguiente si hace falta
+long long sumarMinutos(long long fechaHora, int minutos) {
+    int minuto = fechaHora % 100;
+    int hora = (fechaHora / 100) % 100;
+    int dia = (fechaHora / 10000) % 100;
+    int mes = (fechaHora / 1000000) % 100;
+    int anio = fechaHora / 100000000;
+
+    int total = hora * 60 + minuto + minutos;
+
+    while (total >= 24 * 60) {
+        total -= 24 * 60;
+        dia++;
+
+        if (!fechaHoraValida(anio, mes, dia, 0, 0)) {
+            dia = 1;
+            mes++;
+
+            if (mes > 12) {
+                mes = 1;
+                anio++;
+            }
+        }
+    }
+
+    return armarFechaHora(anio, mes, dia, total / 60, total % 60);
+}
+
 // Imprimir
 
 void imprimirDosDigitos(int numero) {

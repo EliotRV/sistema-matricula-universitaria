@@ -43,3 +43,10 @@ bool leerEspera(std::string ruta, std::vector<EnEspera>& espera, int& lineasConE
 
 // Convierte "HH:MM" a HHMM, -1 si no es una hora valida
 int leerHora(std::string texto);
+
+// Apoyo de texto que tambien usa la consola
+std::string recortar(std::string texto);
+int separar(std::string linea, char separador, std::string campos[], int maximo);
+
+// Texto de solo digitos (hasta 4) a numero, -1 si no es valido
+int aNumero(std::string texto);
