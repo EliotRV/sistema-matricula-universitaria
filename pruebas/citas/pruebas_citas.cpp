@@ -257,3 +257,23 @@ void probarAltura() {
     // Un rojo-negro con n nodos no pasa de 2 * log2(n + 1), que para 1000 es 19
     revisar(arbol.altura() <= 19 && arbol.propiedadesCorrectas(), "la altura no pasa de 19");
 }
+
+// Reprogramar (modificar la hora de una cita)
+
+void probarReprogramar() {
+    cout << "\nReprogramar citas\n";
+
+    ArbolRNCitas arbol;
+    llenar(arbol, 12);
+
+    string carne = arbol.buscar(hora(8, 45))->carne;
+
+    revisar(arbol.reprogramar(hora(8, 45), hora(11, 0)), "reprograma la cita de las 08:45 a las 11:00");
+    revisar(arbol.buscar(hora(8, 45)) == nullptr, "a las 08:45 ya no hay cita");
+    revisar(arbol.buscar(hora(11, 0)) != nullptr && arbol.buscar(hora(11, 0))->carne == carne, "a las 11:00 esta la misma cita");
+    revisar(arbol.contarNodos() == 12 && arbol.propiedadesCorrectas(), "siguen 12 citas y las propiedades se cumplen");
+
+    revisar(!arbol.reprogramar(hora(9, 0), hora(9, 15)), "no reprograma a una hora ocupada");
+    revisar(!arbol.reprogramar(hora(7, 0), hora(7, 30)), "no reprograma una cita que no existe");
+    revisar(arbol.buscar(hora(9, 0)) != nullptr, "la cita de las 09:00 sigue en su lugar");
+}

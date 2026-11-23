@@ -33,6 +33,9 @@ public:
     CitaMatricula* buscarPorCarne(std::string carne);
     bool eliminar(long long fechaHora);
 
+    // Cambia la hora de una cita; false si no existe o la hora nueva esta ocupada
+    bool reprogramar(long long fechaHora, long long nuevaFechaHora);
+
     // Recorridos
     void enOrden(std::vector<CitaMatricula>& salida);
     void rango(long long desde, long long hasta, std::vector<CitaMatricula>& salida);

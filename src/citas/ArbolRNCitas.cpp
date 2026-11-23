@@ -326,6 +326,34 @@ void ArbolRNCitas::reemplazar(NodoRN* viejo, NodoRN* nuevo) {
     }
 }
 
+// Reprogramar: la fecha y hora es la clave del arbol, asi que cambiarla
+// es sacar la cita y volver a meterla en su nuevo lugar.
+// El resumen de cambios suma los de las dos operaciones.
+bool ArbolRNCitas::reprogramar(long long fechaHora, long long nuevaFechaHora) {
+    CitaMatricula* encontrada = buscar(fechaHora);
+
+    if (encontrada == nullptr || buscar(nuevaFechaHora) != nullptr) {
+        return false;
+    }
+
+    CitaMatricula cita = *encontrada;
+
+    eliminar(fechaHora);
+
+    int izquierdasAlBorrar = rotacionesIzquierda;
+    int derechasAlBorrar = rotacionesDerecha;
+    int coloresAlBorrar = recoloraciones;
+
+    cita.fechaHora = nuevaFechaHora;
+    insertar(cita);
+
+    rotacionesIzquierda += izquierdasAlBorrar;
+    rotacionesDerecha += derechasAlBorrar;
+    recoloraciones += coloresAlBorrar;
+
+    return true;
+}
+
 // Eliminar la cita de esa fecha y hora, false si no existe
 bool ArbolRNCitas::eliminar(long long fechaHora) {
     reiniciarCambios();

@@ -20,6 +20,7 @@ void probarInsercion();
 void probarEliminacion();
 void probarAlAzar();
 void probarAltura();
+void probarReprogramar();
 
 // Tabla hash extensible de estudiantes
 void probarHashBasico();
@@ -32,3 +33,12 @@ void probarBPlusBasico();
 void probarBPlusEliminacion();
 void probarBPlusAlAzar();
 void probarBPlusGrande();
+
+// Grafo de requisitos
+void probarGrafoBasico();
+void probarGrafoCambios();
+void probarGrafoAlAzar();
+
+// Cola de espera
+void probarColaBasica();
+void probarColaAlAzar();

@@ -72,6 +72,7 @@ int main() {
         probarEliminacion();
         probarAlAzar();
         probarAltura();
+        probarReprogramar();
         probarHashBasico();
         probarHashEliminacion();
         probarHashAlAzar();
@@ -80,6 +81,11 @@ int main() {
         probarBPlusEliminacion();
         probarBPlusAlAzar();
         probarBPlusGrande();
+        probarGrafoBasico();
+        probarGrafoCambios();
+        probarGrafoAlAzar();
+        probarColaBasica();
+        probarColaAlAzar();
     }
 
     long long reservadas = reservas - reservasAntes;
