@@ -8,7 +8,7 @@
 #include <set>
 #include <vector>
 #include "Pruebas.h"
-#include "../src/ArbolRNCitas.h"
+#include "citas/ArbolRNCitas.h"
 
 using namespace std;
 

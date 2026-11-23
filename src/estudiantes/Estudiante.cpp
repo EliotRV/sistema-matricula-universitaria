@@ -3,7 +3,7 @@
 // Eliot Rojas Vargas
 // Implementacion de la lista enlazada de estudiantes
 
-#include "Estudiante.h"
+#include "estudiantes/Estudiante.h"
 
 using namespace std;
 

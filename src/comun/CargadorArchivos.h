@@ -7,12 +7,12 @@
 
 #include <string>
 #include <vector>
-#include "Estudiante.h"
-#include "CitaMatricula.h"
-#include "Curso.h"
-#include "Grupo.h"
-#include "Matricula.h"
-#include "RegistroNota.h"
+#include "estudiantes/Estudiante.h"
+#include "citas/CitaMatricula.h"
+#include "plan/Curso.h"
+#include "matricula/Grupo.h"
+#include "matricula/Matricula.h"
+#include "historial/RegistroNota.h"
 
 // Arista del grafo: requisito es requisito de curso
 struct Requisito {

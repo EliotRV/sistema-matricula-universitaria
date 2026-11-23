@@ -4,7 +4,7 @@
 // Implementacion de las funciones de la cita de matricula
 
 #include <iostream>
-#include "CitaMatricula.h"
+#include "citas/CitaMatricula.h"
 
 using namespace std;
 

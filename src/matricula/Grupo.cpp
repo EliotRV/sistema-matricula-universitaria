@@ -4,7 +4,7 @@
 // Implementacion de las funciones de grupo y horario
 
 #include <iostream>
-#include "Grupo.h"
+#include "matricula/Grupo.h"
 
 using namespace std;
 

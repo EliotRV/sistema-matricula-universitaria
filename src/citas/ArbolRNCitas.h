@@ -7,7 +7,7 @@
 
 #include <string>
 #include <vector>
-#include "CitaMatricula.h"
+#include "citas/CitaMatricula.h"
 
 // Nodo
 struct NodoRN {

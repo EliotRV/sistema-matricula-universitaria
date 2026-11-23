@@ -7,9 +7,9 @@
 
 #include <string>
 #include <vector>
-#include "Estudiante.h"
-#include "CitaMatricula.h"
-#include "ArbolRNCitas.h"
+#include "estudiantes/Estudiante.h"
+#include "citas/CitaMatricula.h"
+#include "citas/ArbolRNCitas.h"
 
 class SistemaMatricula {
 public:

@@ -3,7 +3,7 @@
 *.o
 *.obj
 programa
-pruebas/pruebas
+pruebas_sistema
 
 # Configuracion local del editor (rutas del compilador de cada equipo)
 .vscode/

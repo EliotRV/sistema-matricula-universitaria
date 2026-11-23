@@ -20,3 +20,15 @@ void probarInsercion();
 void probarEliminacion();
 void probarAlAzar();
 void probarAltura();
+
+// Tabla hash extensible de estudiantes
+void probarHashBasico();
+void probarHashEliminacion();
+void probarHashAlAzar();
+void probarHashGrande();
+
+// Arbol B+ del historial
+void probarBPlusBasico();
+void probarBPlusEliminacion();
+void probarBPlusAlAzar();
+void probarBPlusGrande();

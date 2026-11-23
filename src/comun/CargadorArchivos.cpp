@@ -5,7 +5,7 @@
 
 #include <iostream>
 #include <fstream>
-#include "CargadorArchivos.h"
+#include "comun/CargadorArchivos.h"
 
 using namespace std;
 

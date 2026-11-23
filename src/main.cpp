@@ -5,7 +5,7 @@
 
 #include <iostream>
 #include <string>
-#include "SistemaMatricula.h"
+#include "app/SistemaMatricula.h"
 
 using namespace std;
 

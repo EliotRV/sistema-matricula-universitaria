@@ -4,7 +4,7 @@
 // Implementacion del arbol rojo-negro de citas
 
 #include <iostream>
-#include "ArbolRNCitas.h"
+#include "citas/ArbolRNCitas.h"
 
 using namespace std;
 

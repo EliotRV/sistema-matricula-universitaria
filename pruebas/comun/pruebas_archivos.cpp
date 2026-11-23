@@ -6,7 +6,7 @@
 #include <iostream>
 #include <vector>
 #include "Pruebas.h"
-#include "../src/CargadorArchivos.h"
+#include "comun/CargadorArchivos.h"
 
 using namespace std;
 

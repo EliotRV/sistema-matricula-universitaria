@@ -3,7 +3,7 @@
 // Eliot Rojas Vargas
 // Implementacion del registro de nota
 
-#include "RegistroNota.h"
+#include "historial/RegistroNota.h"
 
 using namespace std;
 

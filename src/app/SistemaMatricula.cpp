@@ -4,8 +4,8 @@
 // Implementacion del sistema de matricula
 
 #include <iostream>
-#include "SistemaMatricula.h"
-#include "CargadorArchivos.h"
+#include "app/SistemaMatricula.h"
+#include "comun/CargadorArchivos.h"
 
 using namespace std;
 
