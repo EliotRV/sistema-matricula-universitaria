@@ -1,0 +1,7 @@
+# Archivo con errores para probar la lectura
+2026-0201;Estudiante Bueno Uno;uno@ucenfotec.ac.cr
+2026-0202;Falta el correo
+;Sin Carne;sincarne@ucenfotec.ac.cr
+
+2026-0203;Demasiados;campos;en;la linea
+  2026-0204 ; Estudiante Bueno Dos ; dos@ucenfotec.ac.cr

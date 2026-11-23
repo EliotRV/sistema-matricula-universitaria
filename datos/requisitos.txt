@@ -1,0 +1,12 @@
+# Requisitos entre cursos (aristas del grafo)
+# Formato: requisito;curso  ->  el primero es requisito del segundo
+INF-101;INF-102
+INF-102;INF-201
+MAT-101;INF-201
+INF-102;INF-202
+INF-201;INF-301
+INF-102;INF-302
+INF-202;INF-302
+INF-202;INF-303
+INF-301;INF-401
+INF-302;INF-401

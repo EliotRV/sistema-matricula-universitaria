@@ -1,0 +1,11 @@
+# Cursos del plan de estudios
+# Formato: codigo;nombre;creditos
+INF-101;Fundamentos de Programacion;4
+MAT-101;Matematica Discreta;3
+INF-102;Programacion Orientada a Objetos;4
+INF-201;Estructura de Datos I;4
+INF-202;Bases de Datos I;4
+INF-301;Estructura de Datos II;4
+INF-302;Diseno y Construccion de Componentes;4
+INF-303;Bases de Datos II;4
+INF-401;Proyecto de Ingenieria del Software;4

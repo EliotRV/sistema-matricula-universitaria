@@ -1,0 +1,16 @@
+# Estudiantes del sistema de matricula
+# Formato: carne;nombre;correo
+2026-0101;Ana Mora Solis;amoras@ucenfotec.ac.cr
+2026-0102;Daniel Castro Perez;dcastrop@ucenfotec.ac.cr
+2026-0103;Maria Fernandez Quiros;mfernandezq@ucenfotec.ac.cr
+2026-0104;Jose Araya Brenes;jarayab@ucenfotec.ac.cr
+2026-0105;Sofia Ramirez Mora;sramirezm@ucenfotec.ac.cr
+2026-0106;Luis Vargas Rojas;lvargasr@ucenfotec.ac.cr
+2026-0107;Valeria Jimenez Soto;vjimenezs@ucenfotec.ac.cr
+2026-0108;Andres Chaves Leon;achavesl@ucenfotec.ac.cr
+2026-0109;Paola Gutierrez Salas;pgutierrezs@ucenfotec.ac.cr
+2026-0110;Diego Hernandez Mata;dhernandezm@ucenfotec.ac.cr
+2026-0111;Camila Rodriguez Vega;crodriguezv@ucenfotec.ac.cr
+2026-0112;Kevin Alfaro Campos;kalfaroc@ucenfotec.ac.cr
+2026-0113;Natalia Solano Arce;nsolanoa@ucenfotec.ac.cr
+2026-0114;Esteban Montero Cruz;emonteroc@ucenfotec.ac.cr

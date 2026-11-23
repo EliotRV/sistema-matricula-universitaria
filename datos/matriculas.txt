@@ -1,0 +1,2 @@
+# Matriculas del periodo (al inicio no hay ninguna)
+# Formato: carne;curso;grupo;periodo;estado (activa o retirada)

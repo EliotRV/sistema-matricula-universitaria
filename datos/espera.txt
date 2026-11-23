@@ -1,0 +1,2 @@
+# Listas de espera por grupo, en orden de llegada (al inicio vacias)
+# Formato: curso;grupo;periodo;carne

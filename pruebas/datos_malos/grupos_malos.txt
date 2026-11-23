@@ -1,0 +1,8 @@
+# Archivo con errores para probar la lectura
+INF-201;1;2027-C1;Miercoles;18:00;21:00;3
+INF-202;1;2027-C1;Funday;18:00;21:00;3
+INF-301;1;2027-1;Lunes;18:00;21:00;2
+INF-302;1;2027-C1;Lunes;21:00;18:00;3
+INF-302;2;2027-C1;Jueves;18:00;21:00;0
+INF-303;1;2027-C1;Martes;18:00;21:00
+INF-401;1;2027-C1;sabado;08:00;11:00;3
