@@ -16,7 +16,8 @@ const int MAXIMO_BITACORA = 30;
 string fechaHoraDelEquipo() {
     time_t ahora = time(nullptr);
     tm partes = *localtime(&ahora);
-    char texto[32];
+    // Con espacio de sobra: el compilador no sabe que cada numero es corto
+    char texto[80];
 
     snprintf(texto, sizeof(texto), "%04d-%02d-%02d %02d:%02d:%02d", partes.tm_year + 1900, partes.tm_mon + 1,
              partes.tm_mday, partes.tm_hour, partes.tm_min, partes.tm_sec);
