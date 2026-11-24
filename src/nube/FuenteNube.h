@@ -12,11 +12,11 @@ class FuenteNube : public IFuenteDatos {
 public:
     FuenteNube(ClienteNube& cliente);
 
-    // false si no hay conexion o si la nube todavia no tiene datos
+    // false si no hay conexion o no hay datos
     bool leer(DatosIniciales& datos) override;
     std::string nombre() override;
 
-    // Despues de leer: true si fallo porque la nube estaba vacia
+    // true si la nube estaba vacia
     bool estabaVacia();
 
 private:

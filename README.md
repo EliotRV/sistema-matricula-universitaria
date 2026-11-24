@@ -60,6 +60,13 @@ make
 
 El programa se ejecuta desde la carpeta `programa/`, porque ahí busca la carpeta `datos/`.
 
+Para trabajar solo con los archivos de `datos/`, sin leer ni escribir en la nube:
+
+```
+programa.exe --local     (Windows)
+./programa --local       (Linux)
+```
+
 En VS Code también se puede compilar con la tarea *C++: compilar carpeta* (Ctrl+Shift+B), y correr las pruebas con la tarea *C++: correr pruebas*.
 
 ## Pruebas

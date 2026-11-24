@@ -204,7 +204,7 @@ string ServicioPlan::nombreDe(string codigo) {
     return curso->nombre;
 }
 
-// Requisitos del curso que no estan en la lista de aprobados (RN-02)
+// RN-02: requisitos pendientes
 void ServicioPlan::requisitosFaltantes(string codigo, vector<string>& aprobados, vector<string>& faltan) {
     vector<string> requisitos;
     grafo.requisitosDe(codigo, requisitos);
@@ -232,7 +232,7 @@ void ServicioPlan::cursos(vector<Curso>& salida) {
     grafo.cursos(salida);
 }
 
-// Todas las aristas: origen[i] es requisito de destino[i]
+// Todas las aristas
 void ServicioPlan::requisitos(vector<string>& origen, vector<string>& destino) {
     vector<Curso> lista;
     grafo.cursos(lista);

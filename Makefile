@@ -19,8 +19,7 @@ PRUEBAS = $(wildcard pruebas/*.cpp pruebas/*/*.cpp)
 ifeq ($(OS),Windows_NT)
     EXT = .exe
     BORRAR = del /Q
-    # Enlace estatico: el .exe no depende de las DLL del compilador
-    # (y el conteo de memoria de las pruebas lo necesita)
+    # Enlace estatico en Windows
     ESTATICO = -static
 else
     EXT =

@@ -11,7 +11,7 @@
 
 class Menu {
 public:
-    // nube y cliente pueden ser nullptr si se trabaja sin nube
+    // Sin nube: nube y cliente en nullptr
     Menu(SistemaMatricula& sistema, IFuenteDatos& fuente, ServicioNube* nube, ClienteNube* cliente);
 
     void ejecutar();

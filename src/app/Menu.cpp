@@ -94,7 +94,7 @@ void Menu::ejecutar() {
     cout << "\n  Programa finalizado.\n";
 }
 
-// Antes de salir se termina de enviar lo que quede en la cola
+// Terminar de enviar la cola antes de salir
 void Menu::terminarEnvios() {
     if (nube == nullptr) {
         return;
@@ -134,7 +134,7 @@ void Menu::recargar() {
         return;
     }
 
-    // Primero se termina de guardar lo pendiente para leer datos al dia
+    // Guardar lo pendiente antes de recargar
     if (nube != nullptr && nube->pendientes() > 0) {
         cout << "\n  Esperando que se envien " << nube->pendientes() << " mensajes...\n";
         nube->esperarVacia(300);
@@ -298,7 +298,7 @@ void Menu::menuEstudiantes() {
                 string nombre = leerTexto("Nombre nuevo (ENTER para dejarlo igual)");
                 string correo = leerTexto("Correo nuevo (ENTER para dejarlo igual)");
 
-                // Se vuelve a buscar por si el puntero cambio
+                // Volver a buscar el estudiante
                 actual = sistema.estudiantes().buscar(carne);
 
                 if (nombre == "") {

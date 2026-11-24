@@ -21,8 +21,7 @@ struct DatosIniciales {
     std::vector<EnEspera> espera;
 };
 
-// Una fuente de datos sabe llenar DatosIniciales; el sistema no sabe
-// si vienen de archivos o de la nube
+// Origen de los datos: archivos o nube
 class IFuenteDatos {
 public:
     virtual ~IFuenteDatos() {}

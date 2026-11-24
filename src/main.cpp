@@ -13,13 +13,31 @@
 
 using namespace std;
 
-int main() {
+// Modo local: solo archivos, sin nube
+int ejecutarLocal() {
+    SistemaMatricula sistema;
+    FuenteArchivos archivos("datos/");
+
+    cout << "  Modo local: los cambios no se guardan en la nube.\n";
+    sistema.cargarDatos(archivos);
+
+    Menu menu(sistema, archivos, nullptr, nullptr);
+    menu.ejecutar();
+
+    return 0;
+}
+
+int main(int argc, char* argv[]) {
     cout << "\n==========================================================\n";
     cout << "  SISTEMA DE MATRICULA UNIVERSITARIA\n";
     cout << "  Estructura de Datos II - Eliot Rojas Vargas\n";
     cout << "==========================================================\n\n";
 
-    // Comunicacion: cola de mensajes atendida por el servicio de la nube
+    if (argc > 1 && string(argv[1]) == "--local") {
+        return ejecutarLocal();
+    }
+
+    // Cola de mensajes y servicio de la nube
     ClienteNube cliente;
     ColaMensajes cola;
     ServicioNube servicioNube(cola, cliente);
@@ -30,7 +48,7 @@ int main() {
 
     IFuenteDatos* fuente = &nube;
 
-    // Primero la nube; si no hay conexion o esta vacia, los archivos locales
+    // Carga desde la nube o desde los archivos
     if (!sistema.cargarDatos(nube)) {
         cout << "\n  Se usan los datos de los archivos locales.\n";
         fuente = &archivos;

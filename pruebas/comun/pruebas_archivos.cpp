@@ -41,7 +41,7 @@ void probarArchivos() {
     revisar(citas.size() == 2 && errores == 5, "2 citas buenas y 5 lineas con error");
 }
 
-// Archivos de cursos, requisitos, grupos, notas, matriculas y espera
+// Demas archivos de datos
 
 void probarArchivosDelPlan() {
     cout << "\nLectura de los archivos del plan de estudios\n";
@@ -121,7 +121,7 @@ void probarDominio() {
     revisar(periodoValido("2026-C3") && !periodoValido("2026-C4") && !periodoValido("26-C1"), "periodos validos e invalidos");
     revisar(armarClaveNota("2026-0101", "2026-C1", "INF-101") == "2026-0101|2026-C1|INF-101", "clave compuesta de la nota");
 
-    // El orden de las claves sigue carne, luego periodo, luego curso
+    // Orden de las claves
     revisar(armarClaveNota("2026-0101", "2026-C3", "INF-202") < armarClaveNota("2026-0102", "2026-C1", "INF-101"), "la clave ordena primero por carne");
     revisar(armarClaveNota("2026-0101", "2026-C1", "MAT-101") < armarClaveNota("2026-0101", "2026-C2", "INF-102"), "luego por periodo");
 }

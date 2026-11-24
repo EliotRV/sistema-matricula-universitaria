@@ -53,7 +53,7 @@ bool fechaHoraValida(int anio, int mes, int dia, int hora, int minuto) {
     return true;
 }
 
-// Suma minutos y pasa al dia siguiente si hace falta
+// Sumar minutos
 long long sumarMinutos(long long fechaHora, int minutos) {
     int minuto = fechaHora % 100;
     int hora = (fechaHora / 100) % 100;
@@ -124,13 +124,13 @@ void imprimirDiaHora(long long fechaHora) {
     imprimirDosDigitos(minuto);
 }
 
-// La cita ya se puede usar si su hora ya llego
+// Cita habilitada
 bool estaHabilitada(CitaMatricula cita, long long horaActual) {
     return cita.fechaHora <= horaActual;
 }
 
 string textoFechaHora(long long fechaHora) {
-    // Con espacio de sobra: el compilador no sabe que cada numero es corto
+    // Texto de la fecha
     char texto[64];
 
     snprintf(texto, sizeof(texto), "%02d/%02d/%04d %02d:%02d", (int)((fechaHora / 10000) % 100),

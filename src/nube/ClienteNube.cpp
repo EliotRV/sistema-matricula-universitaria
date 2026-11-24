@@ -9,8 +9,7 @@
 #include "nube/ClienteNube.h"
 #include "nube/Json.h"
 
-// En Windows popen se llama _popen
-// Los mensajes de error de curl se descartan para que no salgan en el menu
+// popen en Windows
 #ifdef _WIN32
 #define abrirProceso _popen
 #define cerrarProceso _pclose
@@ -37,8 +36,7 @@ void ClienteNube::anotarError(string texto) {
     error = texto;
 }
 
-// Ejecuta curl y devuelve el cuerpo de la respuesta.
-// Al final de la salida curl agrega el codigo HTTP en su propia linea.
+// Ejecutar curl
 bool ClienteNube::ejecutar(string metodo, string direccion, string cuerpo, string& respuesta) {
     string archivo = "";
     string comando = "curl -s -m 20 -X " + metodo + " -w \"\\n%{http_code}\"";

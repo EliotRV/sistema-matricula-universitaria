@@ -38,7 +38,7 @@ void probarColaBasica() {
     revisar(cola.desencolar(carne) && carne == "2026-0107", "luego 0107");
     revisar(cola.esVacia(), "la cola queda vacia");
 
-    // Sacar al ultimo debe actualizar el final de la cola
+    // Sacar al ultimo
     cola.encolar("2026-0101");
     cola.encolar("2026-0105");
     cola.sacar("2026-0105");

@@ -14,7 +14,7 @@ using namespace std;
 
 // Apoyo
 
-// Carga los 9 cursos y 10 requisitos de los archivos de datos
+// Cargar cursos y requisitos
 void cargarPlan(GrafoRequisitos& grafo) {
     vector<Curso> cursos;
     vector<Requisito> requisitos;
@@ -77,7 +77,7 @@ void probarGrafoBasico() {
     vector<string> orden;
     revisar(grafo.ordenTopologico(orden), "hay un orden valido (no hay ciclos)");
 
-    // El mismo orden que muestra el diseno del Entregable 1
+    // Orden topologico del diseno
     revisar(unir(orden) == "INF-101, MAT-101, INF-102, INF-201, INF-202, INF-301, INF-302, INF-303, INF-401", "orden topologico igual al del diseno");
 
     vector<string> lista;
@@ -97,7 +97,7 @@ void probarGrafoBasico() {
     grafo.cursosHabilitados(ana, lista);
     revisar(unir(lista) == "INF-301, INF-302, INF-303", "habilitados de Ana: INF-301, INF-302, INF-303");
 
-    // Daniel reprobo MAT-101 en C1 pero la aprobo en C2
+    // Daniel aprobo MAT-101 en C2
     vector<string> daniel = { "INF-101", "INF-102", "MAT-101", "INF-202" };
     lista.clear();
     grafo.cursosHabilitados(daniel, lista);
@@ -134,7 +134,7 @@ void probarGrafoCambios() {
     revisar(!grafo.esRequisito("INF-202", "INF-303") && grafo.cantidadRequisitos() == 10, "ya no es requisito y quedan 10");
     revisar(!grafo.quitarRequisito("INF-202", "INF-303"), "no se puede quitar dos veces");
 
-    // INF-302 tiene 2 requisitos y habilita a INF-401: se van 3 aristas
+    // Eliminar un curso con sus aristas
     revisar(grafo.eliminarCurso("INF-302"), "elimina INF-302");
     revisar(grafo.cantidadCursos() == 9 && grafo.cantidadRequisitos() == 7, "quedan 9 cursos y 7 requisitos");
 
@@ -151,13 +151,13 @@ void probarGrafoCambios() {
     lista.clear();
     revisar(grafo.ordenTopologico(lista) && lista.size() == 9, "sigue habiendo un orden valido con los 9 cursos");
 
-    // Se borra el primero y el ultimo de la lista de vertices
+    // Borrar el primero y el ultimo
     revisar(grafo.eliminarCurso("INF-101") && grafo.eliminarCurso("MAT-201"), "elimina el primer y el ultimo curso");
     revisar(grafo.agregarCurso(cursoDe("INF-501")), "despues se puede seguir agregando al final");
     revisar(grafo.cantidadCursos() == 8, "quedan 8 cursos");
 }
 
-// Aristas al azar: el grafo nunca debe quedar con un ciclo
+// Aristas al azar sin ciclos
 
 void probarGrafoAlAzar() {
     cout << "\nGrafo de requisitos: 5000 requisitos al azar entre 60 cursos\n";
@@ -183,7 +183,7 @@ void probarGrafoAlAzar() {
             agregados++;
         }
 
-        // Solo se rechaza por ciclo si de verdad ya habia camino de b a a
+        // Solo se rechaza si ya habia camino
         if (resultado == FORMA_CICLO) {
             ciclos++;
 
@@ -192,7 +192,7 @@ void probarGrafoAlAzar() {
             }
         }
 
-        // De vez en cuando se quita un requisito al azar
+        // Quitar requisitos al azar
         if (i % 7 == 0) {
             string c = "C-" + to_string(100 + rand() % 60);
             string d = "C-" + to_string(100 + rand() % 60);
@@ -206,7 +206,7 @@ void probarGrafoAlAzar() {
     vector<string> orden;
     bool hayOrden = grafo.ordenTopologico(orden);
 
-    // En el orden, cada requisito debe aparecer antes que su curso
+    // Cada requisito antes que su curso
     bool respetaRequisitos = hayOrden;
 
     for (int i = 0; i < (int)orden.size() && respetaRequisitos; i++) {

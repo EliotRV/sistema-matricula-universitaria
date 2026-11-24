@@ -9,15 +9,14 @@
 #include <vector>
 #include "historial/RegistroNota.h"
 
-// Maximo de claves por nodo; una hoja llena se divide 2 + 2
+// Maximo de claves por nodo
 const int MAX_CLAVES_BPLUS = 3;
 
-// Minimos para que un nodo que no es la raiz no quede casi vacio
+// Minimo de claves por nodo
 const int MIN_CLAVES_HOJA = (MAX_CLAVES_BPLUS + 1) / 2;
 const int MIN_CLAVES_INTERNO = (MAX_CLAVES_BPLUS + 1) / 2 - 1;
 
-// Nodo: en los internos las claves son el indice; en las hojas cada
-// clave va con su registro de nota y las hojas se enlazan con siguiente
+// Nodo del arbol B+
 struct NodoBPlus {
     std::string claves[MAX_CLAVES_BPLUS + 1];
     RegistroNota registros[MAX_CLAVES_BPLUS + 1];
@@ -43,8 +42,7 @@ public:
     bool modificarNota(std::string carne, std::string periodo, std::string codigoCurso, int nota);
     bool eliminar(std::string carne, std::string periodo, std::string codigoCurso);
 
-    // Consultas por rango recorriendo las hojas enlazadas
-    // Devuelven cuantas hojas se leyeron
+    // Consultas por rango
     int historial(std::string carne, std::vector<RegistroNota>& salida);
     int rangoPeriodos(std::string carne, std::string desde, std::string hasta, std::vector<RegistroNota>& salida);
     void todos(std::vector<RegistroNota>& salida);

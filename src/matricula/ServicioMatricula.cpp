@@ -64,7 +64,7 @@ Grupo* ServicioMatricula::buscarGrupo(string codigoCurso, int numero) {
     return &nodo->grupo;
 }
 
-// Posicion de la matricula activa del estudiante en ese curso, -1 si no hay
+// Matricula activa en un curso
 int ServicioMatricula::buscarMatriculaActiva(string carne, string codigoCurso) {
     for (int i = 0; i < (int)lista.size(); i++) {
         if (lista[i].activa && lista[i].carne == carne && lista[i].codigoCurso == codigoCurso
@@ -93,7 +93,7 @@ bool ServicioMatricula::cargarGrupo(Grupo grupo) {
     nuevo->grupo.matriculados = 0;
     nuevo->siguiente = nullptr;
 
-    // Al final, para conservar el orden de registro
+    // Agregar al final
     if (primero == nullptr) {
         primero = nuevo;
     } else {
@@ -169,7 +169,7 @@ ResultadoMatricula ServicioMatricula::validar(string carne, NodoGrupo* nodo, boo
 
     string curso = nodo->grupo.codigoCurso;
 
-    // RN-03: no se repite un curso aprobado ni se matriculan dos grupos del mismo curso
+    // RN-03: curso aprobado o ya matriculado
     if (historial.aprobo(carne, curso)) {
         return YA_APROBADO;
     }
@@ -178,7 +178,7 @@ ResultadoMatricula ServicioMatricula::validar(string carne, NodoGrupo* nodo, boo
         return YA_MATRICULADO;
     }
 
-    // RN-02: todos los requisitos aprobados (grafo + historial)
+    // RN-02: requisitos aprobados
     vector<string> aprobados;
     historial.aprobados(carne, aprobados);
     plan.requisitosFaltantes(curso, aprobados, faltan);
@@ -187,7 +187,7 @@ ResultadoMatricula ServicioMatricula::validar(string carne, NodoGrupo* nodo, boo
         return FALTAN_REQUISITOS;
     }
 
-    // RN-04: sin choque de horario con lo que ya tiene matriculado
+    // RN-04: choque de horario
     for (int i = 0; i < (int)lista.size(); i++) {
         if (!lista[i].activa || lista[i].carne != carne || lista[i].periodo != periodoActual) {
             continue;
@@ -256,7 +256,7 @@ void ServicioMatricula::explicar(ResultadoMatricula resultado, string carne, Nod
     }
 }
 
-// Deja la matricula activa y saca al estudiante de las colas de ese curso
+// Registrar la matricula
 void ServicioMatricula::registrar(string carne, NodoGrupo* nodo) {
     Matricula matricula;
 
@@ -292,7 +292,7 @@ ResultadoMatricula ServicioMatricula::matricular(string carne, string codigoCurs
         return resultado;
     }
 
-    // RN-05: si no hay cupo se puede pasar a la lista de espera
+    // RN-05: lista de espera
     if (!tieneCupo(nodo->grupo)) {
         cout << "  El grupo esta lleno (" << nodo->grupo.matriculados << " de " << nodo->grupo.cupo << ").\n";
         return GRUPO_LLENO;
@@ -340,7 +340,7 @@ bool ServicioMatricula::unirseAEspera(string carne, string codigoCurso, int nume
     nodo->espera.mostrar();
     cout << "\n";
 
-    // La llegada (milisegundos del reloj) ordena la cola al volver a cargarla de la nube
+    // Orden de llegada a la cola
     EnEspera registro;
     registro.codigoCurso = codigoCurso;
     registro.numeroGrupo = numero;
@@ -378,7 +378,7 @@ bool ServicioMatricula::salirDeEspera(string carne, string codigoCurso, int nume
     return true;
 }
 
-// Retirar (CU-08) y asignar el cupo liberado (CU-09)
+// Retirar (CU-08) y asignar cupo (CU-09)
 
 bool ServicioMatricula::retirar(string carne, string codigoCurso) {
     int posicion = buscarMatriculaActiva(carne, codigoCurso);
@@ -405,8 +405,7 @@ bool ServicioMatricula::retirar(string carne, string codigoCurso) {
     return true;
 }
 
-// RN-07: el cupo pasa al primero de la cola que siga cumpliendo las reglas;
-// los que ya no cumplen salen de la cola
+// RN-07: el cupo pasa al primero que cumpla
 void ServicioMatricula::asignarCupoLiberado(NodoGrupo* nodo) {
     while (tieneCupo(nodo->grupo) && !nodo->espera.esVacia()) {
         string carne;
@@ -496,7 +495,7 @@ bool ServicioMatricula::modificarCupo(string codigoCurso, int numero, int cupo) 
 
     cout << "  Cupo actualizado: " << nodo->grupo.matriculados << " de " << cupo << ".\n";
 
-    // Si se agregaron campos, la lista de espera avanza
+    // Avanzar la lista de espera
     asignarCupoLiberado(nodo);
     return true;
 }
@@ -696,7 +695,7 @@ void ServicioMatricula::esperas(vector<string>& cursos, vector<int>& numeros, ve
     }
 }
 
-// Cada salida de una cola tambien se borra en la nube
+// Borrar de la espera en la nube
 void ServicioMatricula::avisarSalidaDeCola(string carne, NodoGrupo* nodo) {
     emitir(mensajeEliminar(COL_ESPERA, filtroEspera(carne, nodo->grupo.codigoCurso, nodo->grupo.numero, periodoActual),
                            "sale de espera " + carne + " de " + nodo->grupo.codigoCurso));

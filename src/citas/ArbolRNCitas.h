@@ -33,7 +33,7 @@ public:
     CitaMatricula* buscarPorCarne(std::string carne);
     bool eliminar(long long fechaHora);
 
-    // Cambia la hora de una cita; false si no existe o la hora nueva esta ocupada
+    // Cambiar la hora de una cita
     bool reprogramar(long long fechaHora, long long nuevaFechaHora);
 
     // Recorridos

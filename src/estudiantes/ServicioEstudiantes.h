@@ -30,7 +30,7 @@ public:
     std::string nombreDe(std::string carne);
     void todos(std::vector<Estudiante>& salida);
 
-    // La cita del estudiante se guarda tambien en su registro
+    // Guardar la cita en el estudiante
     void ponerCita(std::string carne, long long fechaHora);
     void quitarCita(std::string carne);
 

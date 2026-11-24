@@ -7,7 +7,7 @@
 
 #include <string>
 
-// Una matricula retirada se conserva con activa = false
+// Matricula de un estudiante en un grupo
 struct Matricula {
     std::string carne;
     std::string codigoCurso;

@@ -9,7 +9,7 @@
 
 const int NOTA_MINIMA = 70;
 
-// Nota final de un estudiante en un curso y periodo
+// Nota de un estudiante
 struct RegistroNota {
     std::string carne;
     std::string periodo;
@@ -17,11 +17,10 @@ struct RegistroNota {
     int nota;
 };
 
-// Periodo con formato AAAA-Cn, por ejemplo 2026-C3
+// Periodo AAAA-Cn
 bool periodoValido(std::string periodo);
 
 // Clave del arbol B+: carne|periodo|curso
-// Ordena primero por carne, luego por periodo y luego por curso
 std::string armarClaveNota(std::string carne, std::string periodo, std::string codigoCurso);
 std::string claveDe(RegistroNota registro);
 

@@ -18,7 +18,7 @@ class SistemaMatricula : public EmisorDeMensajes {
 public:
     SistemaMatricula();
 
-    // Carga los datos iniciales desde una fuente (archivos o nube)
+    // Carga desde archivos o nube
     bool cargarDatos(IFuenteDatos& fuente);
     void cargar(DatosIniciales& datos);
     void vaciar();
@@ -33,14 +33,13 @@ public:
     long long horaActual();
     void cambiarHoraActual(long long fechaHora);
 
-    // Todos los componentes publican sus cambios en esta cola
+    // Cola de mensajes
     void conectarCola(IPublicador* cola);
 
-    // Reemplaza en la nube todas las colecciones con los datos actuales;
-    // devuelve cuantos mensajes quedaron en la cola
+    // Subir todos los datos a la nube
     int publicarTodo();
 
-    // Datos del sistema en el mismo formato en que se cargan
+    // Exportar los datos
     void exportar(DatosIniciales& datos);
 
     // Componentes
@@ -51,7 +50,7 @@ public:
     ServicioMatricula& matricula();
 
 private:
-    // El orden importa: cada servicio usa a los que estan antes
+    // Componentes en orden de dependencia
     ServicioEstudiantes servicioEstudiantes;
     ServicioPlan servicioPlan;
     ServicioHistorial servicioHistorial;

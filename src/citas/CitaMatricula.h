@@ -7,7 +7,7 @@
 
 #include <string>
 
-// La fecha y hora se guarda como un numero AAAAMMDDHHMM
+// Fecha y hora como AAAAMMDDHHMM
 struct CitaMatricula {
     long long fechaHora;
     std::string carne;
@@ -16,7 +16,7 @@ struct CitaMatricula {
 long long armarFechaHora(int anio, int mes, int dia, int hora, int minuto);
 bool fechaHoraValida(int anio, int mes, int dia, int hora, int minuto);
 
-// Suma minutos a una fecha y hora (puede pasar al dia siguiente)
+// Sumar minutos a una fecha y hora
 long long sumarMinutos(long long fechaHora, int minutos);
 
 void imprimirFechaHora(long long fechaHora);

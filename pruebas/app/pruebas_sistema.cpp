@@ -13,7 +13,7 @@ using namespace std;
 
 // Apoyo
 
-// Mientras exista, lo que el sistema escribe en pantalla se descarta
+// Silenciar la pantalla
 class Silencio {
 public:
     Silencio() {
@@ -64,7 +64,7 @@ void probarSistemaCarga() {
     revisar(sistema.plan().cantidadRequisitos() == 10 && sistema.historial().cantidad() == 39, "10 requisitos y 39 notas");
     revisar(sistema.citas().cantidad() == 12 && grupos.size() == 10, "12 citas y 10 grupos");
 
-    // La cita queda tambien en el registro del estudiante (hash -> rojo-negro)
+    // Cita guardada en el estudiante
     revisar(sistema.estudiantes().buscar("2026-0103")->cita == a(8, 0), "la cita de 0103 queda en su registro: 08:00");
     revisar(sistema.estudiantes().buscar("2026-0113")->cita == 0, "0113 no tiene cita");
 
@@ -79,7 +79,7 @@ void probarSistemaCarga() {
     revisar(!cargo, "una carpeta sin archivos no se puede cargar");
 }
 
-// Escenario de 6 pasos del Entregable 1
+// Escenario de matricula del diseno
 
 void probarSistemaEscenario() {
     cout << "\nSistema: escenario de matricula del diseno\n";
@@ -152,16 +152,16 @@ void probarSistemaReglas() {
     revisar(matricula.matricular("2026-0105", "INF-999", 1, sistema.horaActual()) == SIN_GRUPO, "un grupo que no existe se rechaza");
     revisar(matricula.matricular("2026-0999", "INF-301", 1, sistema.horaActual()) == SIN_ESTUDIANTE, "un carne que no existe se rechaza");
 
-    // RN-07: quien ya no cumple sale de la cola sin recibir el cupo
+    // RN-07
     matricula.matricular("2026-0101", "INF-301", 1, sistema.horaActual());
     matricula.matricular("2026-0104", "INF-301", 1, sistema.horaActual());
     matricula.unirseAEspera("2026-0104", "INF-301", 1, sistema.horaActual());
 
-    // Ana sale de INF-301 y queda Jose; luego Ana se pone a esperar otro cupo
+    // Ana espera otro cupo
     matricula.retirar("2026-0101", "INF-301");
     revisar(matricula.unirseAEspera("2026-0101", "INF-301", 1, sistema.horaActual()), "Ana vuelve a la lista de espera");
 
-    // Mientras espera, Ana matricula un curso del lunes: ya no le sirve INF-301
+    // Ana matricula otro curso con choque
     matricula.matricular("2026-0101", "INF-302", 1, sistema.horaActual());
     matricula.modificarCupo("INF-301", 1, 3);
 
@@ -235,7 +235,7 @@ void probarSistemaCitasPorPromedio() {
     vector<CitaMatricula> nuevas;
     sistema.citas().todas(nuevas);
 
-    // Las 12 citas del archivo ya estaban por promedio: deben salir iguales
+    // Citas del archivo
     bool iguales = nuevas.size() == 14;
 
     for (int i = 0; i < 12 && iguales; i++) {

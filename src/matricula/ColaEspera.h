@@ -21,13 +21,13 @@ public:
     ColaEspera(const ColaEspera&) = delete;
     ColaEspera& operator=(const ColaEspera&) = delete;
 
-    // Un estudiante no puede estar dos veces en la misma cola
+    // Agregar al final de la cola
     bool encolar(std::string carne);
 
     // Saca al primero; false si la cola esta vacia
     bool desencolar(std::string& carne);
 
-    // Saca a un estudiante de cualquier posicion (por ejemplo si se retira de la espera)
+    // Sacar de cualquier posicion
     bool sacar(std::string carne);
 
     std::string frente();

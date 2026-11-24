@@ -55,7 +55,7 @@ bool ArbolRNCitas::esRojo(NodoRN* nodo) {
     return nodo != nullptr && nodo->rojo;
 }
 
-// Cambia el color y lo cuenta si de verdad cambio
+// Cambiar el color
 void ArbolRNCitas::pintar(NodoRN* nodo, bool rojo) {
     if (nodo == nullptr) {
         return;
@@ -176,7 +176,7 @@ void ArbolRNCitas::corregirInsercion(NodoRN* nodo) {
             tio = abuelo->izquierdo;
         }
 
-        // Caso 1: tio rojo, solo se recolorea y se sigue con el abuelo
+        // Caso 1: tio rojo
         if (esRojo(tio)) {
             pintar(padre, false);
             pintar(tio, false);
@@ -185,7 +185,7 @@ void ArbolRNCitas::corregirInsercion(NodoRN* nodo) {
             nodo = abuelo;
 
         } else {
-            // Caso 2: triangulo, se rota el padre para dejarlo en linea
+            // Caso 2: triangulo
             if (padreIzquierdo && nodo == padre->derecho) {
                 rotarIzquierda(padre);
                 nodo = padre;
@@ -243,7 +243,7 @@ CitaMatricula* ArbolRNCitas::buscar(long long fechaHora) {
     return &nodo->cita;
 }
 
-// El carne no es la clave, hay que recorrer el arbol
+// Buscar por carne recorriendo el arbol
 CitaMatricula* ArbolRNCitas::buscarPorCarne(string carne) {
     NodoRN* nodo = buscarPorCarne(raiz, carne);
 
@@ -326,9 +326,7 @@ void ArbolRNCitas::reemplazar(NodoRN* viejo, NodoRN* nuevo) {
     }
 }
 
-// Reprogramar: la fecha y hora es la clave del arbol, asi que cambiarla
-// es sacar la cita y volver a meterla en su nuevo lugar.
-// El resumen de cambios suma los de las dos operaciones.
+// Reprogramar: sacar y volver a insertar
 bool ArbolRNCitas::reprogramar(long long fechaHora, long long nuevaFechaHora) {
     CitaMatricula* encontrada = buscar(fechaHora);
 
@@ -354,7 +352,7 @@ bool ArbolRNCitas::reprogramar(long long fechaHora, long long nuevaFechaHora) {
     return true;
 }
 
-// Eliminar la cita de esa fecha y hora, false si no existe
+// Eliminar por fecha y hora
 bool ArbolRNCitas::eliminar(long long fechaHora) {
     reiniciarCambios();
 
@@ -364,7 +362,7 @@ bool ArbolRNCitas::eliminar(long long fechaHora) {
         return false;
     }
 
-    // hijo es el que sube al hueco y padreHijo su padre, porque hijo puede ser nulo
+    // Nodo que sube al hueco y su padre
     NodoRN* hijo;
     NodoRN* padreHijo;
     bool seQuitoNegro = !nodo->rojo;
@@ -382,7 +380,7 @@ bool ArbolRNCitas::eliminar(long long fechaHora) {
         reemplazar(nodo, nodo->izquierdo);
 
     } else {
-        // Dos hijos: el sucesor toma el lugar y el color del nodo
+        // Dos hijos: sube el sucesor
         NodoRN* sucesor = minimo(nodo->derecho);
 
         seQuitoNegro = !sucesor->rojo;
@@ -407,7 +405,7 @@ bool ArbolRNCitas::eliminar(long long fechaHora) {
 
     delete nodo;
 
-    // Si salio un negro, a ese camino le falta un negro
+    // Corregir si salio un negro
     if (seQuitoNegro) {
         corregirEliminacion(hijo, padreHijo);
     }
@@ -416,7 +414,6 @@ bool ArbolRNCitas::eliminar(long long fechaHora) {
 }
 
 // Corregir despues de eliminar
-// nodo es el que quedo con un negro de menos, puede ser nulo y por eso se recibe el padre
 
 void ArbolRNCitas::corregirEliminacion(NodoRN* nodo, NodoRN* padre) {
     while (nodo != raiz && !esRojo(nodo)) {
@@ -424,7 +421,7 @@ void ArbolRNCitas::corregirEliminacion(NodoRN* nodo, NodoRN* padre) {
         if (nodo == padre->izquierdo) {
             NodoRN* hermano = padre->derecho;
 
-            // Caso 1: hermano rojo, se rota para que el hermano sea negro
+            // Caso 1: hermano rojo
             if (esRojo(hermano)) {
                 pintar(hermano, false);
                 pintar(padre, true);
@@ -432,14 +429,14 @@ void ArbolRNCitas::corregirEliminacion(NodoRN* nodo, NodoRN* padre) {
                 hermano = padre->derecho;
             }
 
-            // Caso 2: hermano negro con hijos negros, el problema sube al padre
+            // Caso 2: hermano negro con hijos negros
             if (!esRojo(hermano->izquierdo) && !esRojo(hermano->derecho)) {
                 pintar(hermano, true);
                 nodo = padre;
                 padre = nodo->padre;
 
             } else {
-                // Caso 3: el hijo rojo del hermano es el cercano, se pasa al lejano
+                // Caso 3: hijo cercano del hermano rojo
                 if (!esRojo(hermano->derecho)) {
                     pintar(hermano->izquierdo, false);
                     pintar(hermano, true);
@@ -447,7 +444,7 @@ void ArbolRNCitas::corregirEliminacion(NodoRN* nodo, NodoRN* padre) {
                     hermano = padre->derecho;
                 }
 
-                // Caso 4: el hijo lejano del hermano es rojo, se rota el padre y termina
+                // Caso 4: hijo lejano del hermano rojo
                 pintar(hermano, padre->rojo);
                 pintar(padre, false);
                 pintar(hermano->derecho, false);
@@ -491,7 +488,7 @@ void ArbolRNCitas::corregirEliminacion(NodoRN* nodo, NodoRN* padre) {
         }
     }
 
-    // Un rojo que sube al hueco se pinta de negro y repone el negro que falta
+    // El nodo que sube queda negro
     pintar(nodo, false);
 }
 
@@ -519,7 +516,7 @@ void ArbolRNCitas::enOrden(NodoRN* nodo, vector<CitaMatricula>& salida) {
     enOrden(nodo->derecho, salida);
 }
 
-// Citas entre desde y hasta, incluyendo los extremos
+// Citas en un rango
 void ArbolRNCitas::rango(long long desde, long long hasta, vector<CitaMatricula>& salida) {
     rango(raiz, desde, hasta, salida);
 }
@@ -529,7 +526,7 @@ void ArbolRNCitas::rango(NodoRN* nodo, long long desde, long long hasta, vector<
         return;
     }
 
-    // Solo se baja a la izquierda si ahi puede haber citas del rango
+    // Bajar solo donde puede haber citas del rango
     if (desde < nodo->cita.fechaHora) {
         rango(nodo->izquierdo, desde, hasta, salida);
     }
@@ -672,7 +669,7 @@ int ArbolRNCitas::alturaNegra(NodoRN* nodo) {
     return izquierda + 1;
 }
 
-// El recorrido en orden tiene que salir de menor a mayor
+// Recorrido en orden
 bool ArbolRNCitas::ordenCorrecto() {
     vector<CitaMatricula> citas;
     enOrden(citas);

@@ -54,8 +54,7 @@ void probarHashBasico() {
     tabla.insertar(estudianteDe("2026-0104"));
     tabla.insertar(estudianteDe("2026-0105"));
 
-    // Igual a la figura del Entregable 1: 00 y 10 comparten [0102, 0104],
-    // 01 -> [0101, 0105] y 11 -> [0103]
+    // Tabla del diseno
     revisar(tabla.profundidadGlobal() == 2 && tabla.contarCubetas() == 3, "tras 0105: profundidad 2 y tres cubetas (figura del diseno)");
     revisar(tabla.estructuraCorrecta(), "estructura correcta");
 
@@ -86,8 +85,7 @@ void probarHashEliminacion() {
 
     revisar(!tabla.eliminar("2026-0199"), "no elimina un carne que no existe");
 
-    // Al borrar 0103 su cubeta queda vacia y se une con la de 0101 y 0105;
-    // ninguna cubeta usa ya 2 bits, asi que el directorio baja a 1
+    // Eliminar y reducir el directorio
     revisar(tabla.eliminar("2026-0103"), "elimina 0103");
     revisar(tabla.buscar("2026-0103") == nullptr, "0103 ya no esta");
     revisar(tabla.profundidadGlobal() == 1 && tabla.contarCubetas() == 2, "se unen cubetas y el directorio baja a profundidad 1");

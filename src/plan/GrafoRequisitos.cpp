@@ -135,7 +135,7 @@ bool GrafoRequisitos::agregarCurso(Curso curso) {
     nuevo->visitado = false;
     nuevo->pendientes = 0;
 
-    // Se agrega al final para conservar el orden en que se registraron
+    // Agregar al final
     if (primero == nullptr) {
         primero = nuevo;
     } else {
@@ -158,7 +158,7 @@ Curso* GrafoRequisitos::buscarCurso(string codigo) {
     return &vertice->curso;
 }
 
-// El codigo es la clave del vertice y no se cambia
+// Modificar el curso
 bool GrafoRequisitos::modificarCurso(string codigo, string nombre, int creditos) {
     Curso* curso = buscarCurso(codigo);
 
@@ -172,7 +172,7 @@ bool GrafoRequisitos::modificarCurso(string codigo, string nombre, int creditos)
     return true;
 }
 
-// Se quitan primero todas las aristas que tocan al curso
+// Quitar las aristas del curso
 bool GrafoRequisitos::eliminarCurso(string codigo) {
     Vertice* anterior = nullptr;
     Vertice* vertice = primero;
@@ -186,7 +186,7 @@ bool GrafoRequisitos::eliminarCurso(string codigo) {
         return false;
     }
 
-    // Los cursos que habilitaba ya no lo tienen de requisito
+    // Aristas que salen
     NodoAdyacencia* arista = vertice->habilita;
 
     while (arista != nullptr) {
@@ -234,7 +234,7 @@ void GrafoRequisitos::desmarcar() {
     }
 }
 
-// Recorrido en profundidad siguiendo las aristas que salen
+// Recorrido en profundidad
 bool GrafoRequisitos::buscarCamino(Vertice* actual, Vertice* destino) {
     // Caso trivial: llegamos al destino
     if (actual == destino) {
@@ -267,8 +267,7 @@ bool GrafoRequisitos::hayCamino(string desde, string hasta) {
     return buscarCamino(origen, destino);
 }
 
-// La arista requisito -> curso forma un ciclo si ya se puede llegar
-// de curso a requisito: el curso terminaria siendo requisito de si mismo
+// Revisar si se forma un ciclo
 ResultadoRequisito GrafoRequisitos::agregarRequisito(string requisito, string curso) {
     Vertice* origen = buscarVertice(requisito);
     Vertice* destino = buscarVertice(curso);
@@ -355,8 +354,7 @@ void GrafoRequisitos::cursos(vector<Curso>& salida) {
     }
 }
 
-// Algoritmo de Kahn: se toman primero los cursos sin requisitos pendientes;
-// al "aprobar" uno, los que habilita tienen un requisito pendiente menos
+// Algoritmo de Kahn
 bool GrafoRequisitos::ordenTopologico(vector<string>& salida) {
     vector<Vertice*> listos;
 
@@ -372,7 +370,7 @@ bool GrafoRequisitos::ordenTopologico(vector<string>& salida) {
         }
     }
 
-    // listos funciona como cola: se atiende en orden de llegada
+    // Cola de cursos listos
     int frente = 0;
 
     while (frente < (int)listos.size()) {
@@ -390,7 +388,7 @@ bool GrafoRequisitos::ordenTopologico(vector<string>& salida) {
         }
     }
 
-    // Si quedo algun curso afuera es porque habia un ciclo
+    // Ciclo si falto algun curso
     return (int)salida.size() == totalCursos;
 }
 
@@ -461,7 +459,7 @@ void GrafoRequisitos::mostrarListas() {
             cout << " ";
         }
 
-        // Se arma la columna de requisitos para alinearla
+        // Columna de requisitos
         vector<string> requisitos;
         requisitosDe(codigo, requisitos);
 

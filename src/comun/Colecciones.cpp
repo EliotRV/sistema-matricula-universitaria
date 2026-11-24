@@ -107,7 +107,7 @@ Documento documentoDe(Matricula matricula) {
     return documento;
 }
 
-// La llegada ordena la cola al volver a cargarla
+// Orden de llegada
 Documento documentoDe(EnEspera espera, long long llegada) {
     Documento documento;
 

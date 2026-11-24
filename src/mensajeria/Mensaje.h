@@ -15,8 +15,7 @@ enum TipoMensaje {
     MENSAJE_NOTIFICAR
 };
 
-// Un cambio que hay que llevar a la base de datos, o una notificacion
-// para un estudiante. filtro elige los documentos y datos trae los valores.
+// Cambio para la base de datos o notificacion
 struct Mensaje {
     TipoMensaje tipo;
     std::string coleccion;
@@ -25,16 +24,14 @@ struct Mensaje {
     std::string descripcion;
 };
 
-// Los componentes publican mensajes sin saber quien los atiende ni cuando
+// Destino de los mensajes
 class IPublicador {
 public:
     virtual ~IPublicador() {}
     virtual void publicar(Mensaje mensaje) = 0;
 };
 
-// Base de los componentes que avisan sus cambios.
-// Si no estan conectados a una cola, simplemente no avisan
-// (asi funcionan igual en las pruebas y sin nube).
+// Base de los componentes que publican cambios
 class EmisorDeMensajes {
 public:
     void conectar(IPublicador* destino) {

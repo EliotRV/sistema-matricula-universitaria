@@ -9,7 +9,7 @@
 #include <vector>
 #include "estudiantes/Estudiante.h"
 
-// Cada cubeta guarda pocos estudiantes; al llenarse se divide en dos
+// Capacidad de cada cubeta
 const int CAPACIDAD_CUBETA = 2;
 
 // Limite del directorio: 2^20 entradas
@@ -21,10 +21,7 @@ struct Cubeta {
     Estudiante registros[CAPACIDAD_CUBETA];
 };
 
-// El directorio es un arreglo de 2^profundidadGlobal punteros a cubetas.
-// Varias entradas pueden apuntar a la misma cubeta: una cubeta con
-// profundidad local p la comparten 2^(global - p) entradas.
-// La entrada de un carne son los ultimos bits de su valor hash.
+// Tabla hash extensible
 class TablaHashEstudiantes {
 public:
     TablaHashEstudiantes();
@@ -34,7 +31,6 @@ public:
     TablaHashEstudiantes& operator=(const TablaHashEstudiantes&) = delete;
 
     // Operaciones principales
-    // Los punteros que devuelve buscar dejan de servir al insertar o eliminar
     bool insertar(Estudiante estudiante);
     Estudiante* buscar(std::string carne);
     bool modificar(std::string carne, std::string nombre, std::string correo);
@@ -59,7 +55,7 @@ public:
     bool esVacia();
     void vaciar();
 
-    // Valor hash del carne: sus digitos como numero (2026-0105 -> 20260105)
+    // Valor hash del carne
     static unsigned long long valorHash(std::string carne);
 
 private:

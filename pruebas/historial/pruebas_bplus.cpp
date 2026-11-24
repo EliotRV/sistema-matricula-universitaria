@@ -26,7 +26,7 @@ RegistroNota notaDe(string carne, string periodo, string curso, int nota) {
     return registro;
 }
 
-// Las 22 notas de los estudiantes 0101 a 0105 del archivo de datos
+// Notas de los estudiantes 0101 a 0105
 void cargarNotasDelDiseno(ArbolBPlusHistorial& arbol, vector<RegistroNota>& notas) {
     vector<RegistroNota> todas;
     int errores = 0;
@@ -53,9 +53,7 @@ void probarBPlusBasico() {
 
     cargarNotasDelDiseno(arbol, notas);
 
-    // Las notas del archivo ya vienen en orden de clave: cada hoja que se
-    // llena se divide 2 + 2 y la izquierda no vuelve a recibir claves,
-    // asi que todas quedan a la mitad: 22 registros en 11 hojas y 3 niveles
+    // Forma del arbol con las notas del archivo
     revisar(arbol.cantidad() == 22 && notas.size() == 22, "22 registros de los estudiantes 0101 a 0105");
     revisar(arbol.altura() == 3 && arbol.contarHojas() == 11, "3 niveles y 11 hojas a la mitad (insercion en orden)");
     revisar(arbol.estructuraCorrecta(), "estructura correcta");
@@ -77,14 +75,14 @@ void probarBPlusBasico() {
     vector<RegistroNota> historial;
     int hojas = arbol.historial("2026-0102", historial);
 
-    // Daniel: los dos intentos de MAT-101 quedan en su historial
+    // Historial de Daniel
     bool ordenado = historial.size() == 5
         && historial[0].codigoCurso == "INF-101" && historial[1].codigoCurso == "MAT-101" && historial[1].nota == 60
         && historial[2].periodo == "2026-C2" && historial[3].codigoCurso == "MAT-101" && historial[3].nota == 74
         && historial[4].codigoCurso == "INF-202";
 
     revisar(ordenado, "historial de 0102: 5 notas en orden de periodo y curso");
-    // Sus 5 notas estan en 3 hojas; la cuarta se lee para ver que ya sigue otro carne
+    // Historial de un estudiante
     revisar(hojas == 4, "el historial se lee en 4 hojas enlazadas");
 
     vector<RegistroNota> rango;
@@ -110,7 +108,7 @@ void probarBPlusEliminacion() {
 
     revisar(!arbol.eliminar("2026-0101", "2026-C1", "INF-999"), "no elimina un registro que no existe");
 
-    // Se borran de adelante hacia atras en el orden del archivo
+    // Borrar en orden
     bool correcta = true;
     bool encontrados = true;
     int nivelesBajados = 0;
@@ -143,7 +141,7 @@ void probarBPlusEliminacion() {
     revisar(nivelesBajados == 3, "el arbol baja de 3 niveles a vacio");
     revisar(arbol.esVacio() && arbol.cantidad() == 0, "queda vacio");
 
-    // Borrado en otro orden: de atras hacia adelante
+    // Borrado de atras hacia adelante
     cargarNotasDelDiseno(arbol, notas);
     correcta = true;
 
@@ -157,7 +155,7 @@ void probarBPlusEliminacion() {
 
     revisar(correcta && arbol.esVacio(), "borrando en orden inverso tambien queda correcto");
 
-    // Borrados puntuales: la hoja de 0103 C2 queda con una sola clave
+    // Borrados puntuales
     notas.clear();
     cargarNotasDelDiseno(arbol, notas);
 
@@ -263,7 +261,7 @@ void probarBPlusGrande() {
     const string CURSOS[10] = { "INF-101", "MAT-101", "INF-102", "INF-201", "INF-202", "INF-301", "INF-302", "INF-303", "INF-401", "MAT-201" };
     bool todos = true;
 
-    // 5000 estudiantes con 20 notas cada uno (2 periodos x 10 cursos)
+    // Muchas notas
     for (int estudiante = 0; estudiante < 5000; estudiante++) {
         string carne = "2026-" + to_string(10000 + estudiante);
 
@@ -281,7 +279,7 @@ void probarBPlusGrande() {
     revisar(todos && arbol.cantidad() == 100000, "inserta los 100 000");
     revisar(arbol.estructuraCorrecta(), "estructura correcta");
 
-    // Con al menos 2 hijos por nodo interno, la altura no pasa de log2(n) + 1
+    // Altura maxima del arbol
     revisar(arbol.altura() <= 17, "la altura no pasa de 17");
 
     vector<RegistroNota> historial;

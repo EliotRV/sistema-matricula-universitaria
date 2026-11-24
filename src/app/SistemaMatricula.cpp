@@ -16,7 +16,7 @@ SistemaMatricula::SistemaMatricula()
     : servicioHistorial(servicioEstudiantes, servicioPlan),
       servicioCitas(servicioEstudiantes),
       servicioMatricula(servicioEstudiantes, servicioPlan, servicioHistorial, servicioCitas) {
-    // La matricula abre el 7 de diciembre de 2026 a las 08:00
+    // Inicio de la matricula
     hora = armarFechaHora(2026, 12, 7, 8, 0);
 }
 
@@ -50,7 +50,7 @@ void SistemaMatricula::cambiarHoraActual(long long fechaHora) {
 
 // Carga de datos
 
-// Se vacia en orden inverso: primero lo que depende de los demas
+// Vaciar en orden inverso
 void SistemaMatricula::vaciar() {
     servicioMatricula.vaciar();
     servicioCitas.vaciar();
@@ -77,8 +77,7 @@ static void avisoRechazo(string que, string motivo) {
     cout << "  Aviso: " << que << " rechazado, " << motivo << "\n";
 }
 
-// Cada componente valida lo suyo: se cargan en orden para que las
-// referencias (carne, curso, grupo) ya existan cuando se necesitan
+// Cargar cada componente en orden
 void SistemaMatricula::cargar(DatosIniciales& datos) {
     vaciar();
 
@@ -171,7 +170,7 @@ void SistemaMatricula::cargar(DatosIniciales& datos) {
          << "   Datos rechazados: " << rechazados << "\n";
 }
 
-// Exporta el estado actual con la misma forma de los datos iniciales
+// Exportar el estado actual
 void SistemaMatricula::exportar(DatosIniciales& datos) {
     servicioEstudiantes.todos(datos.estudiantes);
     servicioPlan.cursos(datos.cursos);
@@ -209,9 +208,7 @@ void SistemaMatricula::exportar(DatosIniciales& datos) {
 
 // Operaciones que tocan a varios componentes
 
-// No se borra a quien tiene historial o cursos matriculados: se perderia
-// informacion de otros componentes. Si se puede, tambien se le quita la cita
-// y se le saca de las listas de espera.
+// Eliminar estudiante sin historial ni matriculas
 bool SistemaMatricula::eliminarEstudiante(string carne) {
     if (!servicioEstudiantes.existe(carne)) {
         cout << "  No existe un estudiante con el carne " << carne << ".\n";
@@ -256,7 +253,7 @@ bool SistemaMatricula::eliminarCurso(string codigo) {
     return servicioPlan.eliminarCurso(codigo);
 }
 
-// CU-02: cursos no aprobados con todos los requisitos aprobados
+// CU-02: cursos habilitados
 void SistemaMatricula::mostrarHabilitados(string carne) {
     if (!servicioEstudiantes.existe(carne)) {
         cout << "  No existe un estudiante con el carne " << carne << ".\n";
@@ -299,8 +296,7 @@ void SistemaMatricula::mostrarHabilitados(string carne) {
     }
 }
 
-// CU-16 y RN-10: mayor promedio, cita mas temprana.
-// Los estudiantes sin notas van al final, en orden de carne.
+// CU-16 y RN-10: citas por promedio
 struct Candidato {
     string carne;
     double promedio;
@@ -331,7 +327,7 @@ void SistemaMatricula::asignarCitasPorPromedio(long long inicio, int minutosEntr
         candidatos.push_back(candidato);
     }
 
-    // stable_sort deja en orden de carne a los que empatan
+    // Empates en orden de carne
     stable_sort(candidatos.begin(), candidatos.end(), [](const Candidato& a, const Candidato& b) {
         if (a.tieneNotas != b.tieneNotas) {
             return a.tieneNotas;
@@ -373,7 +369,7 @@ void SistemaMatricula::asignarCitasPorPromedio(long long inicio, int minutosEntr
 
     cout << "\n  Citas asignadas: " << servicioCitas.cantidad() << "\n";
 
-    // En la nube se reemplaza la coleccion completa y se avisa a cada estudiante
+    // Reemplazar las citas en la nube
     emitir(mensajeEliminar(COL_CITAS, Documento(), "borrar todas las citas"));
 
     vector<CitaMatricula> nuevas;
@@ -396,8 +392,7 @@ void SistemaMatricula::conectarCola(IPublicador* cola) {
     conectar(cola);
 }
 
-// Primero se vacia cada coleccion y despues se insertan los documentos.
-// La cola los atiende en orden, uno por uno, en segundo plano.
+// Vaciar cada coleccion e insertar los documentos
 int SistemaMatricula::publicarTodo() {
     DatosIniciales datos;
     exportar(datos);
@@ -450,7 +445,7 @@ int SistemaMatricula::publicarTodo() {
         mensajes++;
     }
 
-    // La posicion en la lista sirve como orden de llegada
+    // Orden de llegada
     for (int i = 0; i < (int)datos.espera.size(); i++) {
         EnEspera& e = datos.espera[i];
         emitir(mensajeInsertar(COL_ESPERA, documentoDe(e, i + 1), e.carne + " " + e.codigoCurso));

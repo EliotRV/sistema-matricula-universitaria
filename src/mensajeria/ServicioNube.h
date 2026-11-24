@@ -12,9 +12,7 @@
 #include "mensajeria/ColaMensajes.h"
 #include "nube/ClienteNube.h"
 
-// El menu nunca espera a la red: los componentes publican en la cola y
-// este servicio la vacia en segundo plano. Los mensajes que fallan
-// (por ejemplo sin internet) se guardan para reintentarlos despues.
+// Envia a la nube los mensajes de la cola
 class ServicioNube {
 public:
     ServicioNube(ColaMensajes& cola, ClienteNube& cliente);
@@ -25,13 +23,13 @@ public:
 
     void iniciar();
 
-    // Termina de enviar lo que quede en la cola y cierra el hilo
+    // Detener el servicio
     void detener();
 
-    // Espera hasta que la cola este vacia (o hasta el limite de segundos)
+    // Esperar a que la cola quede vacia
     bool esperarVacia(int segundos);
 
-    // Vuelve a poner en la cola los mensajes que fallaron
+    // Reintentar los mensajes fallidos
     int reintentarFallidos();
 
     void mostrarEstado();
@@ -60,5 +58,5 @@ private:
     void anotar(std::string linea);
 };
 
-// Fecha y hora real del equipo, AAAA-MM-DD HH:MM:SS
+// Fecha y hora del equipo
 std::string fechaHoraDelEquipo();

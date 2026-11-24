@@ -7,9 +7,7 @@
 
 using namespace std;
 
-// El lector avanza por el texto con una posicion; cada funcion lee
-// un tipo de valor y deja la posicion justo despues de el.
-// Todas devuelven false si encuentran algo que no esperaban.
+// Lector de JSON
 
 class LectorJson {
 public:
@@ -72,7 +70,7 @@ public:
             } else if (escape == 'r') {
                 resultado += '\r';
             } else if (escape == 'u') {
-                // \uXXXX: solo se conservan los caracteres ASCII
+                // Solo caracteres ASCII
                 if (posicion + 4 > texto.length()) {
                     return false;
                 }
@@ -89,7 +87,7 @@ public:
         return false;
     }
 
-    // Numeros, true, false y null se devuelven como el texto que son
+    // Numeros, true, false y null
     bool leerPalabra(string& resultado) {
         saltarEspacios();
         resultado = "";
@@ -113,8 +111,7 @@ public:
         return resultado.length() > 0;
     }
 
-    // Cualquier valor reducido a texto plano; los objetos solo se
-    // conservan si son un oid de Mongo
+    // Cualquier valor como texto
     bool leerValorPlano(string& resultado) {
         if (siguienteEs('"')) {
             return leerTexto(resultado);
@@ -218,7 +215,7 @@ public:
         }
     }
 
-    // Objeto de primer nivel buscando la clave "documentos"
+    // Buscar la clave documentos
     bool leerRespuesta(vector<Documento>& documentos) {
         if (!consumir('{')) {
             return false;
@@ -264,7 +261,7 @@ bool leerDocumentos(string json, vector<Documento>& documentos) {
     LectorJson lector(json);
     vector<Documento> leidos;
 
-    // stoi puede lanzar una excepcion con un \u mal escrito
+    // Escape mal escrito
     try {
         if (!lector.leerRespuesta(leidos)) {
             return false;

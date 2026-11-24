@@ -90,7 +90,7 @@ private:
     NodoGrupo* buscarNodo(std::string codigoCurso, int numero);
     int buscarMatriculaActiva(std::string carne, std::string codigoCurso);
 
-    // Revisa todo menos el cupo; en faltan quedan los requisitos pendientes
+    // Revisar las reglas sin el cupo
     ResultadoMatricula validar(std::string carne, NodoGrupo* nodo, bool revisarCita, long long horaActual,
                                std::vector<std::string>& faltan, std::string& choqueCon);
 

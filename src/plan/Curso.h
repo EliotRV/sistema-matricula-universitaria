@@ -7,7 +7,7 @@
 
 #include <string>
 
-// El codigo es la clave del curso en el grafo de requisitos
+// Curso del plan
 struct Curso {
     std::string codigo;
     std::string nombre;

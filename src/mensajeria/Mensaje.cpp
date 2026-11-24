@@ -42,7 +42,7 @@ Mensaje mensajeEliminar(string coleccion, Documento filtro, string descripcion) 
     return mensaje;
 }
 
-// La notificacion se guarda en su propia coleccion con el carne y el texto
+// Notificacion para el estudiante
 Mensaje mensajeNotificar(string carne, string texto) {
     Mensaje mensaje;
 

@@ -23,7 +23,7 @@ CitaMatricula citaDe(int hora, int minuto, string carne) {
     return cita;
 }
 
-// Citas del 7 de diciembre cada 15 minutos desde las 08:00
+// Citas cada 15 minutos
 void llenar(ArbolRNCitas& arbol, int cantidad) {
     for (int i = 0; i < cantidad; i++) {
         int minutos = 8 * 60 + i * 15;
@@ -126,7 +126,7 @@ void probarEliminacion() {
         revisar(ordenado, "el recorrido sigue ordenado");
     }
 
-    // Eliminar cada posicion de arboles de distinto tamano
+    // Eliminar cada posicion
     bool todoBien = true;
 
     for (int cantidad = 1; cantidad <= 40; cantidad++) {
@@ -254,7 +254,7 @@ void probarAltura() {
 
     cout << "  1000 citas insertadas en orden: altura " << arbol.altura() << "\n";
 
-    // Un rojo-negro con n nodos no pasa de 2 * log2(n + 1), que para 1000 es 19
+    // Altura maxima de un rojo-negro
     revisar(arbol.altura() <= 19 && arbol.propiedadesCorrectas(), "la altura no pasa de 19");
 }
 

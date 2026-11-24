@@ -24,7 +24,7 @@ void probarJson() {
     revisar(documento.cantidad() == 2 && documento.valor("carne") == "2026-0102", "poner reemplaza un campo que ya existe");
     revisar(documento.aJson() == "{\"carne\":\"2026-0102\",\"nombre\":\"Ana \\\"la\\\" Mora\\\\Solis\"}", "aJson escapa comillas y barras");
 
-    // Igual a lo que devuelve la API, con saltos de linea y un _id anidado
+    // Respuesta de ejemplo de la API
     string respuesta =
         "\n\n{\n    \"coleccion\": \"eliotrojas_notas\",\n    \"total\": 2,\n    \"documentos\": [\n"
         "        {\n            \"_id\": {\n                \"$oid\": \"6b04e4b64f9f6114ef019c21\"\n            },\n"
@@ -118,7 +118,7 @@ void probarColecciones() {
     revisar(filtro.valor("estado") == "activa" && filtro.valor("grupo") == "1" && filtro.cantidad() == 5, "filtro de la matricula activa");
 }
 
-// Solo si se pide: PRUEBAS_NUBE=1 (no se corre en la integracion continua)
+// Solo con PRUEBAS_NUBE=1
 
 void probarNubeReal() {
     const char* variable = getenv("PRUEBAS_NUBE");

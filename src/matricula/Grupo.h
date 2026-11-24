@@ -7,8 +7,7 @@
 
 #include <string>
 
-// El dia va de 1 (lunes) a 7 (domingo)
-// Las horas se guardan como HHMM, por ejemplo 1800
+// Dia de 1 a 7 y horas como HHMM
 struct Grupo {
     std::string codigoCurso;
     int numero;
@@ -20,13 +19,13 @@ struct Grupo {
     int matriculados;
 };
 
-// Convierte "Lunes", "lunes" o "LUNES" a 1..7, 0 si no es un dia
+// Nombre del dia a numero
 int numeroDeDia(std::string texto);
 std::string nombreDeDia(int dia);
 
 bool horaValida(int horaHHMM);
 
-// Dos grupos chocan si son del mismo periodo y dia y sus horas se traslapan
+// Choque de horario
 bool hayChoque(Grupo a, Grupo b);
 
 bool tieneCupo(Grupo grupo);

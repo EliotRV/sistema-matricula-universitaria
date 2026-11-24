@@ -11,7 +11,7 @@ using namespace std;
 
 // Funciones de apoyo
 
-// Quita espacios y saltos de linea de los extremos
+// Quitar espacios de los extremos
 string recortar(string texto) {
     int inicio = 0;
     int fin = texto.length() - 1;
@@ -27,7 +27,7 @@ string recortar(string texto) {
     return texto.substr(inicio, fin - inicio + 1);
 }
 
-// Separa la linea en campos, devuelve cuantos encontro
+// Separar la linea en campos
 int separar(string linea, char separador, string campos[], int maximo) {
     int cantidad = 0;
     string campo = "";
@@ -53,7 +53,7 @@ int separar(string linea, char separador, string campos[], int maximo) {
     return cantidad;
 }
 
-// Convierte un texto de solo digitos a numero, -1 si no es valido
+// Texto de digitos a numero
 int aNumero(string texto) {
     if (texto.length() == 0 || texto.length() > 4) {
         return -1;
@@ -72,7 +72,7 @@ int aNumero(string texto) {
     return numero;
 }
 
-// Las lineas vacias y las que empiezan con # no son datos
+// Lineas vacias y comentarios
 bool esLineaDeDatos(string linea) {
     return linea.length() > 0 && linea[0] != '#';
 }
@@ -81,8 +81,7 @@ void avisarLinea(string ruta, int numeroLinea, string motivo) {
     cout << "  Aviso: " << ruta << ", linea " << numeroLinea << ": " << motivo << "\n";
 }
 
-// Lectura generica: abre el archivo, salta comentarios y separa los campos
-// Cada fila guarda su numero de linea para poder avisar errores despues
+// Lectura generica de un archivo
 
 const int MAX_CAMPOS = 8;
 
@@ -128,7 +127,7 @@ bool leerFilas(string ruta, int cantidadCampos, vector<Fila>& filas, int& lineas
     return true;
 }
 
-// Avisa y cuenta una fila que no paso la validacion
+// Avisar una fila con error
 void filaConError(string ruta, Fila& fila, string motivo, int& lineasConError) {
     avisarLinea(ruta, fila.numeroLinea, motivo);
     lineasConError++;
@@ -294,7 +293,7 @@ bool leerRequisitos(string ruta, vector<Requisito>& requisitos, int& lineasConEr
     return true;
 }
 
-// Grupos: curso;numero;periodo;dia;inicio;fin;cupo
+// Grupos
 
 bool leerGrupos(string ruta, vector<Grupo>& grupos, int& lineasConError) {
     vector<Fila> filas;

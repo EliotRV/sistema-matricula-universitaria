@@ -14,10 +14,7 @@ struct NodoMensaje {
     NodoMensaje* siguiente;
 };
 
-// Los componentes (productores) publican desde el hilo del menu y el
-// servicio de la nube (consumidor) saca desde su propio hilo.
-// El mutex protege la lista y la variable de condicion despierta al
-// consumidor cuando llega un mensaje, sin que tenga que preguntar a cada rato.
+// Cola de mensajes entre hilos
 class ColaMensajes : public IPublicador {
 public:
     ColaMensajes();
@@ -29,11 +26,10 @@ public:
     // Productor: encola y avisa
     void publicar(Mensaje mensaje) override;
 
-    // Consumidor: espera hasta que haya un mensaje.
-    // Devuelve false cuando la cola se cerro y ya no queda nada.
+    // Consumidor: espera un mensaje
     bool esperarYSacar(Mensaje& mensaje);
 
-    // Despues de cerrar ya no se esperan mensajes nuevos
+    // Cerrar la cola
     void cerrar();
 
     int cantidad();

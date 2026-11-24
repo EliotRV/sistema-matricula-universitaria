@@ -8,8 +8,7 @@
 #include <string>
 #include <vector>
 
-// Todos los valores se guardan como texto: asi los filtros de la API
-// (que comparan como texto) encuentran siempre lo que se busca
+// Todos los valores se guardan como texto
 class Documento {
 public:
     void poner(std::string campo, std::string valor);
@@ -28,5 +27,5 @@ private:
     std::vector<std::string> valores;
 };
 
-// Escapa comillas, barras y saltos de linea para JSON
+// Escapar texto para JSON
 std::string escaparJson(std::string texto);

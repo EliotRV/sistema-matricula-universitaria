@@ -180,7 +180,7 @@ void ServicioHistorial::mostrarHojas() {
 
 // Consultas
 
-// Cursos con al menos una nota de 70 o mas (RN-02)
+// RN-02: cursos aprobados
 void ServicioHistorial::aprobados(string carne, vector<string>& salida) {
     vector<RegistroNota> notas;
     arbol.historial(carne, notas);
@@ -205,7 +205,7 @@ bool ServicioHistorial::aprobo(string carne, string codigoCurso) {
     return false;
 }
 
-// Promedio de todas las notas del historial (RN-10)
+// RN-10: promedio
 bool ServicioHistorial::promedio(string carne, double& resultado) {
     vector<RegistroNota> notas;
     arbol.historial(carne, notas);

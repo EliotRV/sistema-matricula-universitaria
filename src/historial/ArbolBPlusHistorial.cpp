@@ -63,7 +63,7 @@ void ArbolBPlusHistorial::reiniciarCambios() {
 
 // Busqueda
 
-// Hijo por el que hay que bajar: el primero cuya clave separadora sea mayor
+// Hijo por el que hay que bajar
 int ArbolBPlusHistorial::posicionHijo(NodoBPlus* nodo, string clave) {
     int i = 0;
 
@@ -119,7 +119,7 @@ RegistroNota* ArbolBPlusHistorial::buscar(string carne, string periodo, string c
     return nullptr;
 }
 
-// Modificar: solo cambia la nota, la clave queda igual
+// Modificar la nota
 
 bool ArbolBPlusHistorial::modificarNota(string carne, string periodo, string codigoCurso, int nota) {
     RegistroNota* registro = buscar(carne, periodo, codigoCurso);
@@ -134,7 +134,7 @@ bool ArbolBPlusHistorial::modificarNota(string carne, string periodo, string cod
 
 // Insercion
 
-// Inserta ordenado; la hoja puede quedar con una clave de mas
+// Insertar ordenado en la hoja
 void ArbolBPlusHistorial::insertarEnHoja(NodoBPlus* hoja, string clave, RegistroNota registro) {
     int i = hoja->cantidad - 1;
 
@@ -149,7 +149,7 @@ void ArbolBPlusHistorial::insertarEnHoja(NodoBPlus* hoja, string clave, Registro
     hoja->cantidad++;
 }
 
-// La mitad derecha pasa a una hoja nueva enlazada despues de esta
+// Dividir la hoja
 NodoBPlus* ArbolBPlusHistorial::dividirHoja(NodoBPlus* hoja) {
     NodoBPlus* derecha = crearNodo(true);
 
@@ -169,7 +169,7 @@ NodoBPlus* ArbolBPlusHistorial::dividirHoja(NodoBPlus* hoja) {
     return derecha;
 }
 
-// La clave del medio sube y no se queda en ninguno de los dos nodos
+// Dividir el nodo interno
 NodoBPlus* ArbolBPlusHistorial::dividirInterno(NodoBPlus* nodo, string& claveSube) {
     NodoBPlus* derecha = crearNodo(false);
 
@@ -194,8 +194,7 @@ NodoBPlus* ArbolBPlusHistorial::dividirInterno(NodoBPlus* nodo, string& claveSub
     return derecha;
 }
 
-// Devuelve true si el nodo se dividio; en ese caso claveSube y derecha
-// son lo que el padre tiene que agregar
+// Insertar recursivo; true si el nodo se dividio
 bool ArbolBPlusHistorial::insertarEn(NodoBPlus* nodo, string clave, RegistroNota registro, string& claveSube, NodoBPlus*& derecha) {
     // Caso trivial: estamos en una hoja
     if (nodo->esHoja) {
@@ -205,7 +204,7 @@ bool ArbolBPlusHistorial::insertarEn(NodoBPlus* nodo, string clave, RegistroNota
             return false;
         }
 
-        // Al dividir una hoja sube una copia de la primera clave derecha
+        // Sube una copia de la primera clave derecha
         derecha = dividirHoja(nodo);
         claveSube = derecha->claves[0];
         divisiones++;
@@ -222,7 +221,7 @@ bool ArbolBPlusHistorial::insertarEn(NodoBPlus* nodo, string clave, RegistroNota
         return false;
     }
 
-    // El hijo se dividio: se agrega la clave nueva y el hijo nuevo
+    // Agregar la clave y el hijo nuevo
     for (int i = nodo->cantidad; i > posicion; i--) {
         nodo->claves[i] = nodo->claves[i - 1];
     }
@@ -284,7 +283,7 @@ bool ArbolBPlusHistorial::insertar(RegistroNota registro) {
 
 // Eliminacion
 
-// Quita una clave del padre y el hijo que queda a su lado
+// Quitar una clave del padre
 void ArbolBPlusHistorial::quitarDelPadre(NodoBPlus* padre, int posicionClave, int posicionHijo) {
     for (int i = posicionClave; i < padre->cantidad - 1; i++) {
         padre->claves[i] = padre->claves[i + 1];
@@ -298,9 +297,7 @@ void ArbolBPlusHistorial::quitarDelPadre(NodoBPlus* padre, int posicionClave, in
     padre->cantidad--;
 }
 
-// El hijo en "posicion" quedo con menos claves del minimo:
-// primero se intenta pedir una clave a un hermano y si ninguno puede
-// prestar, se une con uno de ellos
+// Corregir un hijo con menos claves del minimo
 void ArbolBPlusHistorial::corregirHijo(NodoBPlus* padre, int posicion) {
     NodoBPlus* hijo = padre->hijos[posicion];
     NodoBPlus* izquierdo = nullptr;
@@ -315,7 +312,7 @@ void ArbolBPlusHistorial::corregirHijo(NodoBPlus* padre, int posicion) {
     }
 
     if (hijo->esHoja) {
-        // Prestamo del hermano izquierdo: su ultima clave pasa al inicio
+        // Prestamo del hermano izquierdo
         if (izquierdo != nullptr && izquierdo->cantidad > MIN_CLAVES_HOJA) {
             for (int i = hijo->cantidad; i > 0; i--) {
                 hijo->claves[i] = hijo->claves[i - 1];
@@ -332,7 +329,7 @@ void ArbolBPlusHistorial::corregirHijo(NodoBPlus* padre, int posicion) {
             return;
         }
 
-        // Prestamo del hermano derecho: su primera clave pasa al final
+        // Prestamo del hermano derecho
         if (derecho != nullptr && derecho->cantidad > MIN_CLAVES_HOJA) {
             hijo->claves[hijo->cantidad] = derecho->claves[0];
             hijo->registros[hijo->cantidad] = derecho->registros[0];
@@ -350,7 +347,7 @@ void ArbolBPlusHistorial::corregirHijo(NodoBPlus* padre, int posicion) {
             return;
         }
 
-        // Union: la hoja de la derecha se vacia en la de la izquierda
+        // Union de hojas
         NodoBPlus* queda = hijo;
         NodoBPlus* sale = derecho;
         int posicionClave = posicion;
@@ -375,7 +372,7 @@ void ArbolBPlusHistorial::corregirHijo(NodoBPlus* padre, int posicion) {
         return;
     }
 
-    // Nodo interno: la clave separadora del padre baja y la del hermano sube
+    // Prestamo en nodo interno
 
     if (izquierdo != nullptr && izquierdo->cantidad > MIN_CLAVES_INTERNO) {
         for (int i = hijo->cantidad; i > 0; i--) {
@@ -420,7 +417,7 @@ void ArbolBPlusHistorial::corregirHijo(NodoBPlus* padre, int posicion) {
         return;
     }
 
-    // Union de internos: queda + clave del padre + sale
+    // Union de nodos internos
     NodoBPlus* queda = hijo;
     NodoBPlus* sale = derecho;
     int posicionClave = posicion;
@@ -445,7 +442,7 @@ void ArbolBPlusHistorial::corregirHijo(NodoBPlus* padre, int posicion) {
         queda->hijos[primerHijo + i] = sale->hijos[i];
     }
 
-    // Solo se borra el nodo, sus hijos ahora son de "queda"
+    // Borrar el nodo vacio
     delete sale;
 
     quitarDelPadre(padre, posicionClave, posicionClave + 1);
@@ -510,7 +507,7 @@ bool ArbolBPlusHistorial::eliminar(string carne, string periodo, string codigoCu
 
     total--;
 
-    // Si la raiz se quedo sin claves, el arbol baja un nivel
+    // El arbol baja un nivel
     if (raiz->cantidad == 0) {
         NodoBPlus* vieja = raiz;
 
@@ -529,8 +526,7 @@ bool ArbolBPlusHistorial::eliminar(string carne, string periodo, string codigoCu
 
 // Consultas por rango
 
-// Las notas de un carne quedan juntas porque la clave empieza con el carne:
-// se baja una vez hasta la primera hoja y se siguen los enlaces
+// Historial de un carne por las hojas enlazadas
 int ArbolBPlusHistorial::historial(string carne, vector<RegistroNota>& salida) {
     string prefijo = carne + "|";
     NodoBPlus* hoja = buscarHoja(prefijo);
@@ -559,7 +555,7 @@ int ArbolBPlusHistorial::historial(string carne, vector<RegistroNota>& salida) {
     return hojasLeidas;
 }
 
-// Notas de un carne entre dos periodos, incluidos los dos
+// Notas de un carne entre dos periodos
 int ArbolBPlusHistorial::rangoPeriodos(string carne, string desde, string hasta, vector<RegistroNota>& salida) {
     string inicio = carne + "|" + desde;
     string fin = carne + "|" + hasta + "|~";
@@ -642,9 +638,7 @@ int ArbolBPlusHistorial::contarHojas() {
 
 // Revision de las propiedades del B+
 
-// Revisa un nodo y su subarbol: cantidad de claves, orden, que las claves
-// esten dentro de los limites que le dan sus separadores y que todas las
-// hojas esten al mismo nivel. Guarda las hojas en orden de izquierda a derecha.
+// Revisar un nodo y su subarbol
 bool ArbolBPlusHistorial::revisarNodo(NodoBPlus* nodo, string minimo, bool hayMinimo, string maximo, bool hayMaximo,
                                       int nivel, int& nivelHojas, vector<NodoBPlus*>& hojas) {
     if (nodo == nullptr || nodo->cantidad > MAX_CLAVES_BPLUS || nodo->cantidad < 1) {
@@ -728,7 +722,7 @@ bool ArbolBPlusHistorial::estructuraCorrecta() {
         return false;
     }
 
-    // La lista enlazada de hojas debe seguir el mismo orden que el arbol
+    // Revisar la lista enlazada de hojas
     NodoBPlus* actual = primeraHoja();
     int suma = 0;
 
@@ -746,7 +740,7 @@ bool ArbolBPlusHistorial::estructuraCorrecta() {
 
 // Vista interna
 
-// 2026-0101|2026-C1|INF-101 se muestra como 0101 C1 INF-101
+// Clave corta para la vista
 string ArbolBPlusHistorial::claveCorta(string clave) {
     int primera = clave.find('|');
     int segunda = clave.find('|', primera + 1);

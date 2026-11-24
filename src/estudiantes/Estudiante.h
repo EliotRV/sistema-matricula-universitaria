@@ -7,9 +7,7 @@
 
 #include <string>
 
-// El carne es la clave en la tabla hash.
-// cita guarda la fecha y hora de su cita de matricula (0 si no tiene):
-// asi se llega a la cita desde el carne sin recorrer el arbol de citas.
+// Estudiante con su cita de matricula
 struct Estudiante {
     std::string carne;
     std::string nombre;

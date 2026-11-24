@@ -9,7 +9,7 @@
 #include "comun/Documento.h"
 #include "comun/CargadorArchivos.h"
 
-// Todas las colecciones llevan el prefijo eliotrojas_
+// Nombres de las colecciones
 const std::string COL_ESTUDIANTES = "eliotrojas_estudiantes";
 const std::string COL_CURSOS = "eliotrojas_cursos";
 const std::string COL_REQUISITOS = "eliotrojas_requisitos";
@@ -30,7 +30,7 @@ Documento documentoDe(Grupo grupo);
 Documento documentoDe(Matricula matricula);
 Documento documentoDe(EnEspera espera, long long llegada);
 
-// Documento -> entidad; false si al documento le faltan datos o no son validos
+// Documento -> entidad
 bool leerDocumento(Documento& documento, Estudiante& estudiante);
 bool leerDocumento(Documento& documento, Curso& curso);
 bool leerDocumento(Documento& documento, Requisito& requisito);
@@ -50,7 +50,7 @@ Documento filtroGrupo(std::string codigoCurso, int numero, std::string periodo);
 Documento filtroMatriculaActiva(std::string carne, std::string codigoCurso, int numero, std::string periodo);
 Documento filtroEspera(std::string carne, std::string codigoCurso, int numero, std::string periodo);
 
-// Campos de la cita: fecha AAAA-MM-DD y hora HH:MM
+// Fecha y hora de la cita
 std::string textoFecha(long long fechaHora);
 std::string textoHora(long long fechaHora);
 std::string textoHoraDelDia(int horaHHMM);

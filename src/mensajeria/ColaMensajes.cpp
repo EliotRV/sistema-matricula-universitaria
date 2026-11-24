@@ -41,14 +41,14 @@ void ColaMensajes::publicar(Mensaje mensaje) {
         total++;
     }
 
-    // Despierta al consumidor si estaba esperando
+    // Despertar al consumidor
     hayMensajes.notify_one();
 }
 
 bool ColaMensajes::esperarYSacar(Mensaje& mensaje) {
     unique_lock<mutex> bloqueo(candado);
 
-    // wait suelta el mutex mientras duerme y lo vuelve a tomar al despertar
+    // Esperar un mensaje
     hayMensajes.wait(bloqueo, [this] { return primero != nullptr || cerrada; });
 
     if (primero == nullptr) {

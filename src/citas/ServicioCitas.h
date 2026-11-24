@@ -44,7 +44,7 @@ public:
 
     int cantidad();
 
-    // Borra todas las citas y la cita guardada en cada estudiante
+    // Borrar todas las citas
     void vaciar();
 
 private:

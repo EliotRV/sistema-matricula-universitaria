@@ -10,7 +10,7 @@ using namespace std;
 
 const string DIAS[7] = { "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo" };
 
-// Pasa el texto a minusculas para comparar sin importar mayusculas
+// Texto a minusculas
 string enMinusculas(string texto) {
     for (int i = 0; i < (int)texto.length(); i++) {
         if (texto[i] >= 'A' && texto[i] <= 'Z') {
@@ -53,7 +53,7 @@ bool hayChoque(Grupo a, Grupo b) {
         return false;
     }
 
-    // Se traslapan si cada uno empieza antes de que termine el otro
+    // Revisar si las horas se traslapan
     return a.horaInicio < b.horaFin && b.horaInicio < a.horaFin;
 }
 

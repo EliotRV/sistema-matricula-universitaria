@@ -13,7 +13,7 @@ using namespace std;
 
 // Constructor y destructor
 
-// Se empieza con profundidad 0: una sola entrada y una sola cubeta
+// Inicia con una entrada y una cubeta
 TablaHashEstudiantes::TablaHashEstudiantes() {
     profundidad = 0;
     total = 0;
@@ -26,10 +26,7 @@ TablaHashEstudiantes::~TablaHashEstudiantes() {
     liberar();
 }
 
-// Cada cubeta se borra una sola vez: desde su entrada mas baja,
-// que es la que cumple indice < 2^profundidadLocal.
-// Se recorre de atras hacia adelante para que esa entrada sea la ultima
-// en visitarse y nadie lea una cubeta ya borrada.
+// Liberar cada cubeta una sola vez
 void TablaHashEstudiantes::liberar() {
     int tamano = tamanoDirectorio();
 
@@ -82,7 +79,7 @@ unsigned long long TablaHashEstudiantes::valorHash(string carne) {
     return valor;
 }
 
-// Los ultimos "profundidad" bits del valor hash
+// Indice en el directorio
 int TablaHashEstudiantes::indiceDe(string carne) {
     unsigned long long mascara = (1ULL << profundidad) - 1;
     return (int)(valorHash(carne) & mascara);
@@ -120,8 +117,7 @@ bool TablaHashEstudiantes::insertar(Estudiante estudiante) {
         return false;
     }
 
-    // Si la cubeta esta llena se divide y se vuelve a intentar,
-    // porque puede que todos queden otra vez del mismo lado
+    // Dividir la cubeta llena y reintentar
     while (true) {
         Cubeta* cubeta = directorio[indiceDe(estudiante.carne)];
 
@@ -138,8 +134,7 @@ bool TablaHashEstudiantes::insertar(Estudiante estudiante) {
     }
 }
 
-// Cada entrada i pasa a tener una copia en i + tamano:
-// las dos apuntan a la misma cubeta hasta que esta se divida
+// Duplicar el directorio
 void TablaHashEstudiantes::duplicarDirectorio() {
     int tamano = tamanoDirectorio();
     Cubeta** nuevo = new Cubeta*[tamano * 2];
@@ -158,7 +153,7 @@ void TablaHashEstudiantes::duplicarDirectorio() {
 bool TablaHashEstudiantes::dividirCubeta(int indice) {
     Cubeta* cubeta = directorio[indice];
 
-    // Si la cubeta ya usa todos los bits del directorio, hay que duplicarlo
+    // Duplicar el directorio si hace falta
     if (cubeta->profundidadLocal == profundidad) {
         if (profundidad == PROFUNDIDAD_MAXIMA) {
             return false;
@@ -170,12 +165,12 @@ bool TablaHashEstudiantes::dividirCubeta(int indice) {
     cubeta->profundidadLocal++;
     Cubeta* nueva = crearCubeta(cubeta->profundidadLocal);
 
-    // El bit nuevo decide a cual de las dos cubetas va cada entrada
+    // Apuntar a la cubeta nueva
     int bit = 1 << (cubeta->profundidadLocal - 1);
     int tamano = tamanoDirectorio();
 
-    for (int i = 0; i < tamano; i++) {
-        if (directorio[i] == cubeta && (i & bit) != 0) {
+    for (int i = indice & (bit - 1); i < tamano; i += bit) {
+        if ((i & bit) != 0) {
             directorio[i] = nueva;
         }
     }
@@ -235,13 +230,16 @@ bool TablaHashEstudiantes::eliminar(string carne) {
     total--;
 
     unirCubetas(indice);
-    reducirDirectorio();
+
+    // Reducir el directorio
+    if (uniones > 0) {
+        reducirDirectorio();
+    }
 
     return true;
 }
 
-// Une la cubeta con su hermana (la que solo difiere en el ultimo bit local)
-// mientras quepan juntas en una sola; repite por si se puede seguir uniendo
+// Unir la cubeta con su hermana
 void TablaHashEstudiantes::unirCubetas(int indice) {
     while (true) {
         Cubeta* cubeta = directorio[indice];
@@ -261,7 +259,7 @@ void TablaHashEstudiantes::unirCubetas(int indice) {
             return;
         }
 
-        // Se conserva la del bit en 0 y la otra se borra
+        // Conservar la cubeta del bit en 0
         Cubeta* queda = cubeta;
         Cubeta* sale = hermana;
 
@@ -277,12 +275,11 @@ void TablaHashEstudiantes::unirCubetas(int indice) {
 
         queda->profundidadLocal--;
 
+        // Apuntar a la cubeta que queda
         int tamano = tamanoDirectorio();
 
-        for (int i = 0; i < tamano; i++) {
-            if (directorio[i] == sale) {
-                directorio[i] = queda;
-            }
+        for (int i = indice & (bit - 1); i < tamano; i += bit) {
+            directorio[i] = queda;
         }
 
         delete sale;
@@ -290,8 +287,7 @@ void TablaHashEstudiantes::unirCubetas(int indice) {
     }
 }
 
-// Si ninguna cubeta usa todos los bits, la mitad alta del directorio
-// repite a la mitad baja y se puede quitar
+// Reducir el directorio a la mitad
 void TablaHashEstudiantes::reducirDirectorio() {
     while (profundidad > 0) {
         int tamano = tamanoDirectorio();
@@ -371,11 +367,7 @@ double TablaHashEstudiantes::factorDeCarga() {
     return (double)total / (contarCubetas() * CAPACIDAD_CUBETA);
 }
 
-// Revisa las reglas del hashing extensible:
-// - cada entrada apunta a la misma cubeta que su entrada mas baja
-// - ninguna cubeta aparece en dos grupos de entradas distintos
-// - cada registro esta en la cubeta que le toca segun su hash
-// - el total coincide con la suma de las cubetas
+// Revisar las reglas del hashing extensible
 bool TablaHashEstudiantes::estructuraCorrecta() {
     int tamano = tamanoDirectorio();
     set<Cubeta*> vistas;
@@ -442,7 +434,7 @@ void TablaHashEstudiantes::mostrarDirectorio() {
          << " (capacidad " << CAPACIDAD_CUBETA << " por cubeta)\n\n";
     cout.unsetf(ios::fixed);
 
-    // Con directorios muy grandes solo se muestran las primeras entradas
+    // Mostrar solo las primeras entradas
     int mostrar = tamano;
 
     if (mostrar > 32) {

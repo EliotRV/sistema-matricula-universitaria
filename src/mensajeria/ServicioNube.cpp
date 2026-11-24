@@ -16,7 +16,7 @@ const int MAXIMO_BITACORA = 30;
 string fechaHoraDelEquipo() {
     time_t ahora = time(nullptr);
     tm partes = *localtime(&ahora);
-    // Con espacio de sobra: el compilador no sabe que cada numero es corto
+    // Texto de la fecha
     char texto[80];
 
     snprintf(texto, sizeof(texto), "%04d-%02d-%02d %02d:%02d:%02d", partes.tm_year + 1900, partes.tm_mon + 1,
@@ -46,7 +46,7 @@ void ServicioNube::iniciar() {
     hilo = thread(&ServicioNube::trabajar, this);
 }
 
-// Cerrar la cola hace que el hilo termine cuando ya no queden mensajes
+// Cerrar la cola y esperar el hilo
 void ServicioNube::detener() {
     {
         lock_guard<mutex> bloqueo(candado);
@@ -65,7 +65,7 @@ void ServicioNube::detener() {
     }
 }
 
-// Hilo consumidor: duerme en la cola hasta que llega un mensaje
+// Hilo consumidor
 void ServicioNube::trabajar() {
     Mensaje mensaje;
 
@@ -117,7 +117,7 @@ bool ServicioNube::procesar(Mensaje& mensaje) {
             return cliente.eliminar(mensaje.coleccion, mensaje.filtro);
 
         case MENSAJE_NOTIFICAR: {
-            // La hora de envio se pone al momento de atender el mensaje
+            // Hora de envio
             Documento datos = mensaje.datos;
             datos.poner("enviada", fechaHoraDelEquipo());
             return cliente.insertar(mensaje.coleccion, datos);

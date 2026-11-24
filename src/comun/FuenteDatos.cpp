@@ -15,8 +15,7 @@ string FuenteArchivos::nombre() {
     return "archivos de " + carpeta;
 }
 
-// Lee los 8 archivos; estudiantes y cursos son obligatorios,
-// los demas pueden faltar (por ejemplo matriculas y espera al inicio)
+// Leer los archivos de datos
 bool FuenteArchivos::leer(DatosIniciales& datos) {
     int errores = 0;
     int totalErrores = 0;

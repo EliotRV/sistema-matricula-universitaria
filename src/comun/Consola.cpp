@@ -17,7 +17,7 @@ bool entradaCerrada() {
     return cerrada;
 }
 
-// Lee una linea completa; marca la entrada como cerrada si ya no hay mas
+// Leer una linea completa
 static bool leerLinea(string& linea) {
     if (cerrada || !getline(cin, linea)) {
         cerrada = true;
@@ -29,7 +29,7 @@ static bool leerLinea(string& linea) {
     return true;
 }
 
-// Numero entero con signo opcional; false si el texto no es un numero
+// Numero entero
 static bool convertirEntero(string texto, int& numero) {
     if (texto.length() == 0 || texto.length() > 9) {
         return false;

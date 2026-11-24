@@ -12,7 +12,7 @@ using namespace std;
 ServicioCitas::ServicioCitas(ServicioEstudiantes& estudiantes) : estudiantes(estudiantes) {
 }
 
-// Cada estudiante tiene a lo sumo una cita y cada hora es de un solo estudiante
+// Una cita por estudiante y por hora
 ResultadoCita ServicioCitas::cargar(CitaMatricula cita) {
     Estudiante* estudiante = estudiantes.buscar(cita.carne);
 
@@ -203,8 +203,7 @@ void ServicioCitas::buscarPorHora(long long fechaHora) {
     imprimirCita(*cita);
 }
 
-// Desde el carne se llega al estudiante por la tabla hash y con la hora
-// guardada se busca la cita en el arbol, sin recorrerlo entero
+// Buscar la cita desde el carne
 void ServicioCitas::consultarDe(string carne) {
     Estudiante* estudiante = estudiantes.buscar(carne);
 
@@ -260,7 +259,7 @@ void ServicioCitas::rango(long long desde, long long hasta) {
     imprimirLista(lista);
 }
 
-// RN-01: solo se matricula a partir de la hora de la cita
+// RN-01: cita habilitada
 bool ServicioCitas::habilitada(string carne, long long horaActual) {
     Estudiante* estudiante = estudiantes.buscar(carne);
 

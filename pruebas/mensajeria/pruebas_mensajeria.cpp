@@ -31,7 +31,7 @@ void probarColaMensajes() {
     revisar(cola.esperarYSacar(mensaje) && mensaje.descripcion == "1" && mensaje.tipo == MENSAJE_INSERTAR, "sale primero el primero que entro");
     revisar(cola.esperarYSacar(mensaje) && mensaje.descripcion == "2" && cola.estaVacia(), "luego el segundo y queda vacia");
 
-    // El consumidor se queda dormido hasta que alguien publica
+    // Consumidor esperando
     bool recibido = false;
     thread consumidor([&] {
         Mensaje llegada;
@@ -44,7 +44,7 @@ void probarColaMensajes() {
 
     revisar(recibido, "el consumidor espera dormido y despierta al llegar un mensaje");
 
-    // 4 productores con 2500 mensajes cada uno y un consumidor
+    // Varios productores y un consumidor
     const int PRODUCTORES = 4;
     const int POR_PRODUCTOR = 2500;
 
@@ -60,7 +60,7 @@ void probarColaMensajes() {
             int productor = llegada.coleccion[0] - '0';
             int numero = atoi(llegada.descripcion.c_str());
 
-            // Los mensajes de un mismo productor llegan en el orden en que los publico
+            // Orden de cada productor
             if (numero != ultimoDe[productor] + 1) {
                 enOrden = false;
             }
@@ -84,7 +84,7 @@ void probarColaMensajes() {
         productores[p].join();
     }
 
-    // Al cerrar, el consumidor termina de vaciar la cola y sale
+    // Cerrar la cola
     compartida.cerrar();
     lector.join();
 
@@ -96,7 +96,7 @@ void probarColaMensajes() {
     revisar(!compartida.esperarYSacar(despues), "con la cola cerrada y vacia ya no se espera");
 }
 
-// Los componentes avisan cada cambio con un mensaje
+// Mensajes de los componentes
 
 class Recolector : public IPublicador {
 public:
@@ -130,7 +130,7 @@ void probarMensajesDeComponentes() {
     FuenteArchivos archivos("datos/");
     sistema.cargarDatos(archivos);
 
-    // Se conecta despues de cargar: la carga no genera mensajes
+    // Conectar la cola despues de cargar
     sistema.conectarCola(&recolector);
     sistema.cambiarHoraActual(armarFechaHora(2026, 12, 7, 12, 0));
 
@@ -156,7 +156,7 @@ void probarMensajesDeComponentes() {
     revisar(recolector.contar(MENSAJE_INSERTAR, COL_ESPERA) == 1 && recolector.contar(MENSAJE_ELIMINAR, COL_ESPERA) == 1,
             "Jose entra a la cola y sale de ella");
 
-    // Al retirar, el orden de los mensajes importa: primero se retira a Ana
+    // Orden de los mensajes al retirar
     bool ordenRetiro = retiro.size() >= 4
         && retiro[0].tipo == MENSAJE_ACTUALIZAR && retiro[0].coleccion == COL_MATRICULAS && retiro[0].datos.valor("estado") == "retirada"
         && retiro[1].tipo == MENSAJE_ELIMINAR && retiro[1].coleccion == COL_ESPERA
@@ -168,7 +168,7 @@ void probarMensajesDeComponentes() {
     revisar(recolector.contar(MENSAJE_INSERTAR, COL_ESTUDIANTES) == 1 && recolector.contar(MENSAJE_ELIMINAR, COL_ESTUDIANTES) == 1,
             "registrar y eliminar un estudiante generan su mensaje");
 
-    // Subir todo: 8 colecciones que se vacian + todos los documentos
+    // Subir todo
     recolector.mensajes.clear();
     int publicados = sistema.publicarTodo();
 

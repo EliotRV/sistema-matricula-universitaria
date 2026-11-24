@@ -32,7 +32,7 @@ bool FuenteNube::consultar(string coleccion, vector<Documento>& documentos) {
     return true;
 }
 
-// Convierte cada documento con su funcion; cuenta los que no sirven
+// Convertir los documentos
 template <typename Entidad>
 void convertir(vector<Documento>& documentos, vector<Entidad>& salida, int& malos) {
     for (int i = 0; i < (int)documentos.size(); i++) {
@@ -58,7 +58,7 @@ bool FuenteNube::leer(DatosIniciales& datos) {
     vector<Documento> matriculas;
     vector<Documento> espera;
 
-    // Una consulta por coleccion; si una falla no se usa nada
+    // Leer cada coleccion
     if (!consultar(COL_ESTUDIANTES, estudiantes) || !consultar(COL_CURSOS, cursos)
         || !consultar(COL_REQUISITOS, requisitos) || !consultar(COL_NOTAS, notas)
         || !consultar(COL_CITAS, citas) || !consultar(COL_GRUPOS, grupos)
@@ -72,7 +72,7 @@ bool FuenteNube::leer(DatosIniciales& datos) {
         return false;
     }
 
-    // La cola se reconstruye en orden de llegada
+    // Reconstruir la cola
     stable_sort(espera.begin(), espera.end(), [](const Documento& a, const Documento& b) {
         return atoll(a.valor("llegada").c_str()) < atoll(b.valor("llegada").c_str());
     });

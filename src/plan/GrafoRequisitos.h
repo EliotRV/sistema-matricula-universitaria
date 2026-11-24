@@ -11,15 +11,13 @@
 
 struct Vertice;
 
-// Nodo de una lista de adyacencia: apunta a otro vertice
+// Nodo de una lista de adyacencia
 struct NodoAdyacencia {
     Vertice* vertice;
     NodoAdyacencia* siguiente;
 };
 
-// Cada curso guarda dos listas:
-// habilita  -> cursos de los que es requisito (aristas que salen)
-// requisitos -> cursos que necesita aprobar antes (aristas que entran)
+// Curso con sus listas de adyacencia
 struct Vertice {
     Curso curso;
     NodoAdyacencia* habilita;
@@ -65,10 +63,10 @@ public:
     void cursos(std::vector<Curso>& salida);
     bool hayCamino(std::string desde, std::string hasta);
 
-    // Orden valido de la carrera; false si el grafo tuviera un ciclo
+    // Orden topologico
     bool ordenTopologico(std::vector<std::string>& salida);
 
-    // Cursos no aprobados cuyos requisitos estan todos aprobados
+    // Cursos habilitados
     void cursosHabilitados(std::vector<std::string>& aprobados, std::vector<std::string>& salida);
 
     // Vista interna

@@ -11,9 +11,7 @@
 
 using namespace std;
 
-// Conteo de memoria para detectar fugas.
-// Son atomicos porque algunas pruebas reservan memoria desde varios hilos
-// a la vez: con un contador normal se perderian sumas.
+// Conteo de memoria
 
 atomic<long long> reservas(0);
 atomic<long long> liberaciones(0);
@@ -48,8 +46,7 @@ void operator delete(void* bloque, size_t) noexcept {
 int pruebasHechas = 0;
 int pruebasFalladas = 0;
 
-// Pantalla real: algunas pruebas silencian cout mientras el sistema trabaja,
-// pero los resultados siempre se tienen que ver
+// Salida de los resultados
 streambuf* pantalla = nullptr;
 
 void revisar(bool condicion, string descripcion) {

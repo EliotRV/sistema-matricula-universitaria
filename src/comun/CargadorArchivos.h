@@ -14,7 +14,7 @@
 #include "matricula/Matricula.h"
 #include "historial/RegistroNota.h"
 
-// Arista del grafo: requisito es requisito de curso
+// Arista del grafo
 struct Requisito {
     std::string requisito;
     std::string curso;
@@ -28,9 +28,7 @@ struct EnEspera {
     std::string carne;
 };
 
-// Todas devuelven false si el archivo no se pudo abrir
-// En lineasConError queda la cantidad de lineas que no se pudieron leer
-// Las lineas vacias y las que empiezan con # se ignoran
+// Lectura de cada archivo de datos
 
 bool leerEstudiantes(std::string ruta, std::vector<Estudiante>& estudiantes, int& lineasConError);
 bool leerCitas(std::string ruta, std::vector<CitaMatricula>& citas, int& lineasConError);
@@ -41,12 +39,12 @@ bool leerNotas(std::string ruta, std::vector<RegistroNota>& notas, int& lineasCo
 bool leerMatriculas(std::string ruta, std::vector<Matricula>& matriculas, int& lineasConError);
 bool leerEspera(std::string ruta, std::vector<EnEspera>& espera, int& lineasConError);
 
-// Convierte "HH:MM" a HHMM, -1 si no es una hora valida
+// Hora HH:MM a HHMM
 int leerHora(std::string texto);
 
 // Apoyo de texto que tambien usa la consola
 std::string recortar(std::string texto);
 int separar(std::string linea, char separador, std::string campos[], int maximo);
 
-// Texto de solo digitos (hasta 4) a numero, -1 si no es valido
+// Texto de digitos a numero
 int aNumero(std::string texto);
