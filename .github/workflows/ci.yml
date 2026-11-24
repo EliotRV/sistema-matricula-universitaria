@@ -1,0 +1,63 @@
+# Proyecto: Sistema de Matricula Universitaria
+# Estructura de Datos II
+# Eliot Rojas Vargas
+# Integracion continua: compilar, probar y publicar el ejecutable
+
+name: Integracion continua
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  compilar-y-probar:
+    name: ${{ matrix.nombre }}
+    runs-on: ${{ matrix.sistema }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - nombre: Linux
+            sistema: ubuntu-latest
+            make: make
+            ejecutable: programa
+          - nombre: Windows
+            sistema: windows-latest
+            make: mingw32-make
+            ejecutable: programa.exe
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Descargar el codigo
+        uses: actions/checkout@v4
+
+      - name: Version del compilador
+        run: g++ --version
+
+      - name: Compilar el programa
+        run: ${{ matrix.make }}
+
+      - name: Correr las pruebas
+        run: ${{ matrix.make }} pruebas
+
+      # Despliegue: el ejecutable listo para usar, con sus datos
+      - name: Preparar el paquete
+        run: |
+          mkdir -p paquete
+          cp ${{ matrix.ejecutable }} paquete/
+          cp -r datos paquete/
+          cp README.md paquete/
+
+      - name: Publicar el ejecutable
+        uses: actions/upload-artifact@v4
+        with:
+          name: sistema-matricula-${{ matrix.nombre }}
+          path: paquete/
+          retention-days: 30
