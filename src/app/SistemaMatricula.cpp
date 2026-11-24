@@ -8,6 +8,7 @@
 #include <algorithm>
 #include "app/SistemaMatricula.h"
 #include "comun/Consola.h"
+#include "comun/Colecciones.h"
 
 using namespace std;
 
@@ -371,4 +372,90 @@ void SistemaMatricula::asignarCitasPorPromedio(long long inicio, int minutosEntr
     }
 
     cout << "\n  Citas asignadas: " << servicioCitas.cantidad() << "\n";
+
+    // En la nube se reemplaza la coleccion completa y se avisa a cada estudiante
+    emitir(mensajeEliminar(COL_CITAS, Documento(), "borrar todas las citas"));
+
+    vector<CitaMatricula> nuevas;
+    servicioCitas.todas(nuevas);
+
+    for (int i = 0; i < (int)nuevas.size(); i++) {
+        emitir(mensajeInsertar(COL_CITAS, documentoDe(nuevas[i]), "asignar cita " + nuevas[i].carne));
+        emitir(mensajeNotificar(nuevas[i].carne, "Su cita de matricula es el " + textoFechaHora(nuevas[i].fechaHora)));
+    }
+}
+
+// Nube
+
+void SistemaMatricula::conectarCola(IPublicador* cola) {
+    servicioEstudiantes.conectar(cola);
+    servicioPlan.conectar(cola);
+    servicioHistorial.conectar(cola);
+    servicioCitas.conectar(cola);
+    servicioMatricula.conectar(cola);
+    conectar(cola);
+}
+
+// Primero se vacia cada coleccion y despues se insertan los documentos.
+// La cola los atiende en orden, uno por uno, en segundo plano.
+int SistemaMatricula::publicarTodo() {
+    DatosIniciales datos;
+    exportar(datos);
+
+    const string COLECCIONES[8] = { COL_ESTUDIANTES, COL_CURSOS, COL_REQUISITOS, COL_NOTAS,
+                                    COL_CITAS, COL_GRUPOS, COL_MATRICULAS, COL_ESPERA };
+    int mensajes = 0;
+
+    for (int i = 0; i < 8; i++) {
+        emitir(mensajeEliminar(COLECCIONES[i], Documento(), "vaciar la coleccion"));
+        mensajes++;
+    }
+
+    for (int i = 0; i < (int)datos.estudiantes.size(); i++) {
+        emitir(mensajeInsertar(COL_ESTUDIANTES, documentoDe(datos.estudiantes[i]), datos.estudiantes[i].carne));
+        mensajes++;
+    }
+
+    for (int i = 0; i < (int)datos.cursos.size(); i++) {
+        emitir(mensajeInsertar(COL_CURSOS, documentoDe(datos.cursos[i]), datos.cursos[i].codigo));
+        mensajes++;
+    }
+
+    for (int i = 0; i < (int)datos.requisitos.size(); i++) {
+        Requisito& requisito = datos.requisitos[i];
+        emitir(mensajeInsertar(COL_REQUISITOS, documentoDe(requisito), requisito.requisito + " -> " + requisito.curso));
+        mensajes++;
+    }
+
+    for (int i = 0; i < (int)datos.notas.size(); i++) {
+        RegistroNota& nota = datos.notas[i];
+        emitir(mensajeInsertar(COL_NOTAS, documentoDe(nota), nota.carne + " " + nota.periodo + " " + nota.codigoCurso));
+        mensajes++;
+    }
+
+    for (int i = 0; i < (int)datos.citas.size(); i++) {
+        emitir(mensajeInsertar(COL_CITAS, documentoDe(datos.citas[i]), datos.citas[i].carne));
+        mensajes++;
+    }
+
+    for (int i = 0; i < (int)datos.grupos.size(); i++) {
+        Grupo& grupo = datos.grupos[i];
+        emitir(mensajeInsertar(COL_GRUPOS, documentoDe(grupo), grupo.codigoCurso + "-" + to_string(grupo.numero)));
+        mensajes++;
+    }
+
+    for (int i = 0; i < (int)datos.matriculas.size(); i++) {
+        Matricula& m = datos.matriculas[i];
+        emitir(mensajeInsertar(COL_MATRICULAS, documentoDe(m), m.carne + " " + m.codigoCurso));
+        mensajes++;
+    }
+
+    // La posicion en la lista sirve como orden de llegada
+    for (int i = 0; i < (int)datos.espera.size(); i++) {
+        EnEspera& e = datos.espera[i];
+        emitir(mensajeInsertar(COL_ESPERA, documentoDe(e, i + 1), e.carne + " " + e.codigoCurso));
+        mensajes++;
+    }
+
+    return mensajes;
 }

@@ -50,3 +50,10 @@ void probarSistemaReglas();
 void probarSistemaBorrados();
 void probarSistemaCitasPorPromedio();
 void probarSistemaExportar();
+
+// Nube y mensajeria
+void probarJson();
+void probarColecciones();
+void probarNubeReal();
+void probarColaMensajes();
+void probarMensajesDeComponentes();

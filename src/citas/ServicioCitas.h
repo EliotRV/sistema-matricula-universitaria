@@ -9,6 +9,7 @@
 #include <vector>
 #include "citas/ArbolRNCitas.h"
 #include "estudiantes/ServicioEstudiantes.h"
+#include "mensajeria/Mensaje.h"
 
 enum ResultadoCita {
     CITA_ASIGNADA,
@@ -17,7 +18,7 @@ enum ResultadoCita {
     CITA_HORA_OCUPADA
 };
 
-class ServicioCitas {
+class ServicioCitas : public EmisorDeMensajes {
 public:
     ServicioCitas(ServicioEstudiantes& estudiantes);
 

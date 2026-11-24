@@ -6,10 +6,16 @@
 #include <iostream>
 #include "app/Menu.h"
 #include "comun/Consola.h"
+#include "comun/Colecciones.h"
 
 using namespace std;
 
-Menu::Menu(SistemaMatricula& sistema, IFuenteDatos& fuente) : sistema(sistema), fuente(fuente) {
+Menu::Menu(SistemaMatricula& sistema, IFuenteDatos& fuente, ServicioNube* nube, ClienteNube* cliente)
+    : sistema(sistema), fuente(&fuente), nube(nube), cliente(cliente) {
+}
+
+void Menu::usarFuente(IFuenteDatos& otra) {
+    fuente = &otra;
 }
 
 void Menu::encabezado(string modulo) {
@@ -32,8 +38,9 @@ void Menu::ejecutar() {
         cout << "   3. Grupos y matricula     (colas de espera)\n";
         cout << "   4. Citas de matricula     (arbol rojo-negro)\n";
         cout << "   5. Historial academico    (arbol B+)\n";
-        cout << "   6. Cambiar hora actual\n";
-        cout << "   7. Volver a cargar los datos iniciales\n";
+        cout << "   6. Nube y cola de mensajes\n";
+        cout << "   7. Cambiar hora actual\n";
+        cout << "   8. Volver a cargar los datos\n";
         cout << "   0. Salir\n";
 
         opcion = leerOpcion();
@@ -60,17 +67,20 @@ void Menu::ejecutar() {
                 break;
 
             case 6:
+                menuNube();
+                break;
+
+            case 7:
                 cambiarHora();
                 pausar();
                 break;
 
-            case 7:
+            case 8:
                 recargar();
                 pausar();
                 break;
 
             case 0:
-                cout << "\n  Programa finalizado.\n";
                 break;
 
             default:
@@ -79,6 +89,29 @@ void Menu::ejecutar() {
         }
 
     } while (opcion != 0 && !entradaCerrada());
+
+    terminarEnvios();
+    cout << "\n  Programa finalizado.\n";
+}
+
+// Antes de salir se termina de enviar lo que quede en la cola
+void Menu::terminarEnvios() {
+    if (nube == nullptr) {
+        return;
+    }
+
+    int pendientes = nube->pendientes();
+
+    if (pendientes > 0) {
+        cout << "\n  Enviando " << pendientes << " mensajes pendientes a la nube...\n";
+        nube->esperarVacia(300);
+    }
+
+    nube->detener();
+
+    if (nube->fallidos() > 0) {
+        cout << "  Aviso: " << nube->fallidos() << " cambios no se pudieron guardar en la nube.\n";
+    }
 }
 
 void Menu::cambiarHora() {
@@ -95,12 +128,121 @@ void Menu::cambiarHora() {
 }
 
 void Menu::recargar() {
-    cout << "\n";
+    cout << "\n  Se vuelven a leer los datos desde " << fuente->nombre() << ".\n";
 
-    if (leerSiNo("Se perderan los cambios hechos desde el menu. Continuar")) {
-        cout << "\n";
-        sistema.cargarDatos(fuente);
+    if (!leerSiNo("Continuar")) {
+        return;
     }
+
+    // Primero se termina de guardar lo pendiente para leer datos al dia
+    if (nube != nullptr && nube->pendientes() > 0) {
+        cout << "\n  Esperando que se envien " << nube->pendientes() << " mensajes...\n";
+        nube->esperarVacia(300);
+    }
+
+    cout << "\n";
+    sistema.cargarDatos(*fuente);
+}
+
+// Nube y cola de mensajes
+
+void Menu::menuNube() {
+    int opcion;
+
+    do {
+        encabezado("NUBE Y COLA DE MENSAJES");
+        cout << "   1. Estado de la cola y del servicio\n";
+        cout << "   2. Bitacora de mensajes enviados\n";
+        cout << "   3. Probar la conexion con la nube\n";
+        cout << "   4. Reintentar los mensajes que fallaron\n";
+        cout << "   5. Subir todos los datos actuales a la nube\n";
+        cout << "   6. Ver las ultimas notificaciones enviadas\n";
+        cout << "   0. Volver\n";
+
+        opcion = leerOpcion();
+        cout << "\n";
+
+        if (opcion != 0 && (nube == nullptr || cliente == nullptr)) {
+            cout << "  El sistema esta trabajando sin nube.\n";
+            pausar();
+            continue;
+        }
+
+        switch (opcion) {
+            case 1:
+                nube->mostrarEstado();
+                break;
+
+            case 2:
+                nube->mostrarBitacora();
+                break;
+
+            case 3:
+                cout << "  Consultando " << URL_API_NUBE << " ...\n";
+
+                if (cliente->disponible()) {
+                    cout << "  Hay conexion con la nube.\n";
+                } else {
+                    cout << "  " << cliente->ultimoError() << ".\n";
+                }
+                break;
+
+            case 4: {
+                int reintentos = nube->reintentarFallidos();
+                cout << "  Mensajes devueltos a la cola: " << reintentos << "\n";
+                break;
+            }
+
+            case 5: {
+                cout << "  Se reemplazan las colecciones eliotrojas_ con los datos actuales.\n";
+
+                if (leerSiNo("Continuar")) {
+                    int mensajes = sistema.publicarTodo();
+                    cout << "\n  " << mensajes << " mensajes en la cola. Se envian en segundo plano:\n";
+                    cout << "  puede seguir usando el sistema y ver el avance en la opcion 1.\n";
+                }
+                break;
+            }
+
+            case 6: {
+                vector<Documento> notificaciones;
+
+                if (!cliente->consultar(COL_NOTIFICACIONES, notificaciones)) {
+                    cout << "  " << cliente->ultimoError() << ".\n";
+                    break;
+                }
+
+                if (notificaciones.size() == 0) {
+                    cout << "  Todavia no hay notificaciones.\n";
+                    break;
+                }
+
+                int desde = notificaciones.size() > 10 ? notificaciones.size() - 10 : 0;
+
+                cout << "  Enviada              Carne       Mensaje\n";
+                cout << "  ----------------------------------------------------------\n";
+
+                for (int i = desde; i < (int)notificaciones.size(); i++) {
+                    cout << "  " << notificaciones[i].valor("enviada") << "  " << notificaciones[i].valor("carne")
+                         << "   " << notificaciones[i].valor("mensaje") << "\n";
+                }
+
+                cout << "\n  Total en la nube: " << notificaciones.size() << "\n";
+                break;
+            }
+
+            case 0:
+                break;
+
+            default:
+                cout << "  Opcion invalida.\n";
+        }
+
+        if (opcion != 0) {
+            pausar();
+        }
+
+    } while (opcion != 0 && !entradaCerrada());
 }
 
 // Estudiantes

@@ -5,6 +5,7 @@
 
 #include <iostream>
 #include "citas/ServicioCitas.h"
+#include "comun/Colecciones.h"
 
 using namespace std;
 
@@ -86,6 +87,9 @@ bool ServicioCitas::asignar(long long fechaHora, string carne) {
             break;
     }
 
+    emitir(mensajeInsertar(COL_CITAS, documentoDe(cita), "asignar cita " + carne));
+    emitir(mensajeNotificar(carne, "Su cita de matricula es el " + textoFechaHora(fechaHora)));
+
     cout << "  Cita asignada: ";
     imprimirCita(cita);
     cout << "\n";
@@ -120,6 +124,12 @@ bool ServicioCitas::reprogramar(string carne, long long nuevaFechaHora) {
 
     estudiante->cita = nuevaFechaHora;
 
+    Documento datos;
+    datos.poner("fecha", textoFecha(nuevaFechaHora));
+    datos.poner("hora", textoHora(nuevaFechaHora));
+    emitir(mensajeActualizar(COL_CITAS, filtroCita(carne), datos, "reprogramar cita " + carne));
+    emitir(mensajeNotificar(carne, "Su cita de matricula cambio al " + textoFechaHora(nuevaFechaHora)));
+
     cout << "  Cita de " << estudiante->nombre << ": ";
     imprimirFechaHora(anterior);
     cout << " -> ";
@@ -145,8 +155,13 @@ bool ServicioCitas::cancelar(long long fechaHora) {
     cout << "  Cita cancelada: ";
     imprimirCita(*cita);
 
-    estudiantes.quitarCita(cita->carne);
+    string carne = cita->carne;
+
+    estudiantes.quitarCita(carne);
     arbol.eliminar(fechaHora);
+
+    emitir(mensajeEliminar(COL_CITAS, filtroCita(carne), "cancelar cita " + carne));
+    emitir(mensajeNotificar(carne, "Su cita de matricula fue cancelada"));
 
     cout << "\n";
     arbol.resumenCambios();
@@ -163,6 +178,8 @@ bool ServicioCitas::cancelarDe(string carne) {
 
     arbol.eliminar(estudiante->cita);
     estudiante->cita = 0;
+
+    emitir(mensajeEliminar(COL_CITAS, filtroCita(carne), "cancelar cita " + carne));
 
     return true;
 }

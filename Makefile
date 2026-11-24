@@ -9,7 +9,7 @@
 # En Windows con WinLibs el comando es mingw32-make
 
 CXX = g++
-CXXFLAGS = -std=c++17 -Wall -Wextra -Isrc
+CXXFLAGS = -std=c++17 -Wall -Wextra -Isrc -pthread
 
 # Todos los .cpp de src/ y de cada carpeta de componente
 FUENTES = $(wildcard src/*.cpp src/*/*.cpp)
@@ -19,7 +19,8 @@ PRUEBAS = $(wildcard pruebas/*.cpp pruebas/*/*.cpp)
 ifeq ($(OS),Windows_NT)
     EXT = .exe
     BORRAR = del /Q
-    # El conteo de memoria de las pruebas necesita enlazar estatico en Windows
+    # Enlace estatico: el .exe no depende de las DLL del compilador
+    # (y el conteo de memoria de las pruebas lo necesita)
     ESTATICO = -static
 else
     EXT =
@@ -35,7 +36,7 @@ PROGRAMA_PRUEBAS = pruebas_sistema$(EXT)
 all: $(PROGRAMA)
 
 $(PROGRAMA): $(FUENTES)
-	$(CXX) $(CXXFLAGS) -g $(FUENTES) -o $@
+	$(CXX) $(CXXFLAGS) -g $(ESTATICO) $(FUENTES) -o $@
 
 $(PROGRAMA_PRUEBAS): $(FUENTES_SIN_MAIN) $(PRUEBAS)
 	$(CXX) $(CXXFLAGS) -O2 -Ipruebas $(ESTATICO) $(PRUEBAS) $(FUENTES_SIN_MAIN) -o $@

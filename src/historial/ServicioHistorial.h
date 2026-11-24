@@ -10,8 +10,9 @@
 #include "historial/ArbolBPlusHistorial.h"
 #include "estudiantes/ServicioEstudiantes.h"
 #include "plan/ServicioPlan.h"
+#include "mensajeria/Mensaje.h"
 
-class ServicioHistorial {
+class ServicioHistorial : public EmisorDeMensajes {
 public:
     ServicioHistorial(ServicioEstudiantes& estudiantes, ServicioPlan& plan);
 

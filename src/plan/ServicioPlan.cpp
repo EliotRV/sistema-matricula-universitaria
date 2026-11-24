@@ -5,6 +5,7 @@
 
 #include <iostream>
 #include "plan/ServicioPlan.h"
+#include "comun/Colecciones.h"
 
 using namespace std;
 
@@ -34,6 +35,8 @@ bool ServicioPlan::agregarCurso(Curso curso) {
         return false;
     }
 
+    emitir(mensajeInsertar(COL_CURSOS, documentoDe(curso), "agregar curso " + curso.codigo));
+
     cout << "  Curso agregado: " << curso.codigo << "  " << curso.nombre << "\n";
     return true;
 }
@@ -48,6 +51,11 @@ bool ServicioPlan::modificarCurso(string codigo, string nombre, int creditos) {
         cout << "  No existe el curso " << codigo << ".\n";
         return false;
     }
+
+    Documento datos;
+    datos.poner("nombre", nombre);
+    datos.poner("creditos", to_string(creditos));
+    emitir(mensajeActualizar(COL_CURSOS, filtroCurso(codigo), datos, "modificar curso " + codigo));
 
     cout << "  Curso actualizado.\n";
     return true;
@@ -65,6 +73,16 @@ bool ServicioPlan::eliminarCurso(string codigo) {
         return false;
     }
 
+    emitir(mensajeEliminar(COL_CURSOS, filtroCurso(codigo), "eliminar curso " + codigo));
+
+    for (int i = 0; i < (int)antes.size(); i++) {
+        emitir(mensajeEliminar(COL_REQUISITOS, filtroRequisito(antes[i], codigo), "quitar requisito " + antes[i] + " -> " + codigo));
+    }
+
+    for (int i = 0; i < (int)habilitaba.size(); i++) {
+        emitir(mensajeEliminar(COL_REQUISITOS, filtroRequisito(codigo, habilitaba[i]), "quitar requisito " + codigo + " -> " + habilitaba[i]));
+    }
+
     cout << "  Curso eliminado junto con " << antes.size() + habilitaba.size() << " requisitos.\n";
     return true;
 }
@@ -75,9 +93,15 @@ bool ServicioPlan::agregarRequisito(string requisito, string curso) {
     ResultadoRequisito resultado = grafo.agregarRequisito(requisito, curso);
 
     switch (resultado) {
-        case REQUISITO_AGREGADO:
+        case REQUISITO_AGREGADO: {
+            Requisito nuevo;
+            nuevo.requisito = requisito;
+            nuevo.curso = curso;
+            emitir(mensajeInsertar(COL_REQUISITOS, documentoDe(nuevo), "agregar requisito " + requisito + " -> " + curso));
+
             cout << "  " << requisito << " ahora es requisito de " << curso << ".\n";
             return true;
+        }
 
         case CURSO_NO_EXISTE:
             cout << "  Uno de los dos cursos no existe.\n";
@@ -105,6 +129,8 @@ bool ServicioPlan::quitarRequisito(string requisito, string curso) {
         cout << "  " << requisito << " no es requisito de " << curso << ".\n";
         return false;
     }
+
+    emitir(mensajeEliminar(COL_REQUISITOS, filtroRequisito(requisito, curso), "quitar requisito " + requisito + " -> " + curso));
 
     cout << "  Requisito quitado.\n";
     return true;

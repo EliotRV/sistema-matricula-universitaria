@@ -8,8 +8,9 @@
 #include <string>
 #include <vector>
 #include "plan/GrafoRequisitos.h"
+#include "mensajeria/Mensaje.h"
 
-class ServicioPlan {
+class ServicioPlan : public EmisorDeMensajes {
 public:
     // Sin mensajes: para la carga de datos
     bool cargarCurso(Curso curso);

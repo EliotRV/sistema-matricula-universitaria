@@ -7,6 +7,7 @@
 #include <iomanip>
 #include "historial/ServicioHistorial.h"
 #include "comun/Consola.h"
+#include "comun/Colecciones.h"
 
 using namespace std;
 
@@ -47,6 +48,8 @@ bool ServicioHistorial::registrar(RegistroNota registro) {
         return false;
     }
 
+    emitir(mensajeInsertar(COL_NOTAS, documentoDe(registro), "registrar nota " + registro.carne + " " + registro.codigoCurso));
+
     cout << "  Nota registrada.\n\n";
     arbol.resumenCambios();
 
@@ -69,6 +72,10 @@ bool ServicioHistorial::corregir(string carne, string periodo, string codigoCurs
     int anterior = registro->nota;
     arbol.modificarNota(carne, periodo, codigoCurso, nota);
 
+    Documento datos;
+    datos.poner("nota", to_string(nota));
+    emitir(mensajeActualizar(COL_NOTAS, filtroNota(carne, periodo, codigoCurso), datos, "corregir nota " + carne + " " + codigoCurso));
+
     cout << "  Nota corregida: " << anterior << " -> " << nota << "\n";
     return true;
 }
@@ -78,6 +85,8 @@ bool ServicioHistorial::eliminar(string carne, string periodo, string codigoCurs
         cout << "  No hay una nota de " << codigoCurso << " en " << periodo << " para " << carne << ".\n";
         return false;
     }
+
+    emitir(mensajeEliminar(COL_NOTAS, filtroNota(carne, periodo, codigoCurso), "eliminar nota " + carne + " " + codigoCurso));
 
     cout << "  Nota eliminada.\n\n";
     arbol.resumenCambios();

@@ -7,6 +7,7 @@
 #include "estudiantes/ServicioEstudiantes.h"
 #include "citas/CitaMatricula.h"
 #include "comun/Consola.h"
+#include "comun/Colecciones.h"
 
 using namespace std;
 
@@ -36,6 +37,7 @@ bool ServicioEstudiantes::registrar(Estudiante estudiante) {
     }
 
     cout << "  Estudiante registrado: " << estudiante.carne << "  " << estudiante.nombre << "\n\n";
+    emitir(mensajeInsertar(COL_ESTUDIANTES, documentoDe(estudiante), "registrar " + estudiante.carne));
     tabla.resumenCambios();
 
     return true;
@@ -52,6 +54,11 @@ bool ServicioEstudiantes::modificar(string carne, string nombre, string correo) 
         return false;
     }
 
+    Documento datos;
+    datos.poner("nombre", nombre);
+    datos.poner("correo", correo);
+    emitir(mensajeActualizar(COL_ESTUDIANTES, filtroEstudiante(carne), datos, "modificar " + carne));
+
     cout << "  Datos actualizados.\n";
     return true;
 }
@@ -61,6 +68,8 @@ bool ServicioEstudiantes::eliminar(string carne) {
         cout << "  No existe un estudiante con el carne " << carne << ".\n";
         return false;
     }
+
+    emitir(mensajeEliminar(COL_ESTUDIANTES, filtroEstudiante(carne), "eliminar " + carne));
 
     cout << "  Estudiante eliminado.\n\n";
     tabla.resumenCambios();

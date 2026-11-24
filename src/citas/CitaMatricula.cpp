@@ -4,6 +4,7 @@
 // Implementacion de las funciones de la cita de matricula
 
 #include <iostream>
+#include <cstdio>
 #include "citas/CitaMatricula.h"
 
 using namespace std;
@@ -126,4 +127,14 @@ void imprimirDiaHora(long long fechaHora) {
 // La cita ya se puede usar si su hora ya llego
 bool estaHabilitada(CitaMatricula cita, long long horaActual) {
     return cita.fechaHora <= horaActual;
+}
+
+string textoFechaHora(long long fechaHora) {
+    char texto[20];
+
+    snprintf(texto, sizeof(texto), "%02d/%02d/%04d %02d:%02d", (int)((fechaHora / 10000) % 100),
+             (int)((fechaHora / 1000000) % 100), (int)(fechaHora / 100000000), (int)((fechaHora / 100) % 100),
+             (int)(fechaHora % 100));
+
+    return texto;
 }

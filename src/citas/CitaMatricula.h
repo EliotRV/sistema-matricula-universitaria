@@ -20,6 +20,9 @@ bool fechaHoraValida(int anio, int mes, int dia, int hora, int minuto);
 long long sumarMinutos(long long fechaHora, int minutos);
 
 void imprimirFechaHora(long long fechaHora);
+
+// La misma fecha como texto: DD/MM/AAAA HH:MM
+std::string textoFechaHora(long long fechaHora);
 void imprimirDiaHora(long long fechaHora);
 
 bool estaHabilitada(CitaMatricula cita, long long horaActual);

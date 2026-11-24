@@ -6,14 +6,17 @@
 #include <iostream>
 #include <cstdlib>
 #include <new>
+#include <atomic>
 #include "Pruebas.h"
 
 using namespace std;
 
-// Conteo de memoria para detectar fugas
+// Conteo de memoria para detectar fugas.
+// Son atomicos porque algunas pruebas reservan memoria desde varios hilos
+// a la vez: con un contador normal se perderian sumas.
 
-long long reservas = 0;
-long long liberaciones = 0;
+atomic<long long> reservas(0);
+atomic<long long> liberaciones(0);
 
 void* operator new(size_t bytes) {
     reservas++;
@@ -98,6 +101,11 @@ int main() {
         probarSistemaBorrados();
         probarSistemaCitasPorPromedio();
         probarSistemaExportar();
+        probarJson();
+        probarColecciones();
+        probarColaMensajes();
+        probarMensajesDeComponentes();
+        probarNubeReal();
     }
 
     long long reservadas = reservas - reservasAntes;

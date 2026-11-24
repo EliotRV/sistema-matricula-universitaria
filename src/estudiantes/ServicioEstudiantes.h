@@ -8,8 +8,9 @@
 #include <string>
 #include <vector>
 #include "estudiantes/TablaHashEstudiantes.h"
+#include "mensajeria/Mensaje.h"
 
-class ServicioEstudiantes {
+class ServicioEstudiantes : public EmisorDeMensajes {
 public:
     // Sin mensajes: para la carga de datos
     bool cargar(Estudiante estudiante);

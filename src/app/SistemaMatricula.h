@@ -12,8 +12,9 @@
 #include "historial/ServicioHistorial.h"
 #include "citas/ServicioCitas.h"
 #include "matricula/ServicioMatricula.h"
+#include "mensajeria/Mensaje.h"
 
-class SistemaMatricula {
+class SistemaMatricula : public EmisorDeMensajes {
 public:
     SistemaMatricula();
 
@@ -31,6 +32,13 @@ public:
     // Hora simulada para probar las citas
     long long horaActual();
     void cambiarHoraActual(long long fechaHora);
+
+    // Todos los componentes publican sus cambios en esta cola
+    void conectarCola(IPublicador* cola);
+
+    // Reemplaza en la nube todas las colecciones con los datos actuales;
+    // devuelve cuantos mensajes quedaron en la cola
+    int publicarTodo();
 
     // Datos del sistema en el mismo formato en que se cargan
     void exportar(DatosIniciales& datos);

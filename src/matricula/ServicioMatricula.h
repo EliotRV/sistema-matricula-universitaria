@@ -14,6 +14,7 @@
 #include "plan/ServicioPlan.h"
 #include "historial/ServicioHistorial.h"
 #include "citas/ServicioCitas.h"
+#include "mensajeria/Mensaje.h"
 
 // Cada grupo lleva su propia cola de espera
 struct NodoGrupo {
@@ -35,7 +36,7 @@ enum ResultadoMatricula {
     GRUPO_LLENO
 };
 
-class ServicioMatricula {
+class ServicioMatricula : public EmisorDeMensajes {
 public:
     ServicioMatricula(ServicioEstudiantes& estudiantes, ServicioPlan& plan,
                       ServicioHistorial& historial, ServicioCitas& citas);
@@ -99,4 +100,5 @@ private:
     void registrar(std::string carne, NodoGrupo* nodo);
     void asignarCupoLiberado(NodoGrupo* nodo);
     void imprimirGrupo(Grupo& grupo);
+    void avisarSalidaDeCola(std::string carne, NodoGrupo* nodo);
 };
